@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "451416412613",
+    "project_id": "proyectosg-efee2",
+    "storage_bucket": "proyectosg-efee2.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:451416412613:android:190f5241641be820adfbac",
+        "android_client_info": {
+          "package_name": "com.grupo9.proyectosg"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDxJU-6ArOUYrv7jfCuESbEW6LhSQ2X96Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

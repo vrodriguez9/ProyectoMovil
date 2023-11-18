@@ -34,8 +34,10 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
     super.initState();
     _model = createModel(context, () => HomePageAdminModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.txtBuscarController ??= TextEditingController();
+    _model.txtBuscarFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -69,42 +71,41 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
             mainAxisSize: MainAxisSize.max,
             children: [
               Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 100.0, 0.0, 0.0),
+                padding: EdgeInsetsDirectional.fromSTEB(0.0, 100.0, 0.0, 0.0),
                 child: Row(
                   mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.start,
                   children: [
-                    InkWell(
-                      splashColor: Colors.transparent,
-                      focusColor: Colors.transparent,
-                      hoverColor: Colors.transparent,
-                      highlightColor: Colors.transparent,
-                      onTap: () async {
-                        // Close Drawer
-                        if (scaffoldKey.currentState!.isDrawerOpen ||
-                            scaffoldKey.currentState!.isEndDrawerOpen) {
-                          Navigator.pop(context);
-                        }
-                      },
-                      child: Icon(
-                        Icons.arrow_back,
-                        color: FlutterFlowTheme.of(context).primaryText,
-                        size: 24.0,
+                    Align(
+                      alignment: AlignmentDirectional(-1.00, 0.00),
+                      child: Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(15.0, 0.0, 0.0, 0.0),
+                        child: InkWell(
+                          splashColor: Colors.transparent,
+                          focusColor: Colors.transparent,
+                          hoverColor: Colors.transparent,
+                          highlightColor: Colors.transparent,
+                          onTap: () async {
+                            // Close Drawer
+                            if (scaffoldKey.currentState!.isDrawerOpen ||
+                                scaffoldKey.currentState!.isEndDrawerOpen) {
+                              Navigator.pop(context);
+                            }
+                          },
+                          child: Icon(
+                            Icons.arrow_back,
+                            color: FlutterFlowTheme.of(context).primaryText,
+                            size: 35.0,
+                          ),
+                        ),
                       ),
                     ),
-                  ],
-                ),
-              ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                child: Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
                     ClipRRect(
                       borderRadius: BorderRadius.circular(8.0),
                       child: Image.asset(
                         'assets/images/LogoRotulosBlack.png',
-                        width: MediaQuery.sizeOf(context).width * 0.5,
+                        width: 200.0,
                         height: 45.0,
                         fit: BoxFit.contain,
                         alignment: Alignment(0.00, 0.00),
@@ -120,7 +121,7 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     Text(
-                      'Nuestros Servicios',
+                      'Administrar Servicios',
                       textAlign: TextAlign.center,
                       style: FlutterFlowTheme.of(context).bodyMedium.override(
                             fontFamily: 'Barlow',
@@ -246,9 +247,11 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                               hoverColor: Colors.transparent,
                               highlightColor: Colors.transparent,
                               onTap: () async {
-                                // CerrarSesion
+                                GoRouter.of(context).prepareAuthEvent();
+                                await authManager.signOut();
+                                GoRouter.of(context).clearRedirectLocation();
 
-                                context.pushNamed('Login');
+                                context.goNamedAuth('Login', context.mounted);
                               },
                               child: ListTile(
                                 leading: Icon(
@@ -382,8 +385,8 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               45.0, 0.0, 45.0, 0.0),
                           child: TextFormField(
-                            controller: _model.textController,
-                            focusNode: _model.textFieldFocusNode,
+                            controller: _model.txtBuscarController,
+                            focusNode: _model.txtBuscarFocusNode,
                             obscureText: false,
                             decoration: InputDecoration(
                               labelStyle:
@@ -432,7 +435,7 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             textAlign: TextAlign.start,
                             cursorColor: FlutterFlowTheme.of(context).primary,
-                            validator: _model.textControllerValidator
+                            validator: _model.txtBuscarControllerValidator
                                 .asValidator(context),
                           ),
                         ),
@@ -471,9 +474,9 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                       .override(
                                         fontFamily: 'Barlow',
                                         color: FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                            .primary,
                                         fontSize: 25.0,
-                                        fontWeight: FontWeight.w900,
+                                        fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
                                         useGoogleFonts: false,
                                       ),
@@ -562,6 +565,12 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                 height: 305.0,
                                 decoration: BoxDecoration(
                                   color: FlutterFlowTheme.of(context).primary,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: Image.network(
+                                      '',
+                                    ).image,
+                                  ),
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
                                 child: Stack(
@@ -622,7 +631,7 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                                 .override(
                                                   fontFamily: 'Readex Pro',
                                                   fontSize: 24.0,
-                                                  fontWeight: FontWeight.w900,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                           ),
                                         ],
@@ -743,10 +752,9 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                         .headlineMedium
                                         .override(
                                           fontFamily: 'Barlow',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
+                                          color: Colors.white,
                                           fontSize: 25.0,
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic,
                                           useGoogleFonts: false,
                                         ),
@@ -1023,10 +1031,9 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                         .headlineMedium
                                         .override(
                                           fontFamily: 'Barlow',
-                                          color: FlutterFlowTheme.of(context)
-                                              .primaryText,
+                                          color: Colors.white,
                                           fontSize: 25.0,
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic,
                                           useGoogleFonts: false,
                                         ),
@@ -1259,38 +1266,6 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                       },
                     ),
                   ),
-                ),
-                Row(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    FFButtonWidget(
-                      onPressed: () async {
-                        context.pushNamed('HomePageUser');
-                      },
-                      text: '(Boton para Pruebas) Ir a User',
-                      options: FFButtonOptions(
-                        height: 40.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            35.0, 0.0, 35.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: Color(0xFF649A9A),
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.black,
-                                  fontSize: 13.0,
-                                ),
-                        elevation: 3.0,
-                        borderSide: BorderSide(
-                          color: Color(0xFF808080),
-                          width: 1.0,
-                        ),
-                        borderRadius: BorderRadius.circular(15.0),
-                      ),
-                    ),
-                  ],
                 ),
               ],
             ),

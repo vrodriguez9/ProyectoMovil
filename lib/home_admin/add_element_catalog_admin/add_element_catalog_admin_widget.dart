@@ -40,6 +40,8 @@ class _AddElementCatalogAdminWidgetState
 
     _model.txtDescripcionController ??= TextEditingController();
     _model.txtDescripcionFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -80,8 +82,8 @@ class _AddElementCatalogAdminWidgetState
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
                 Icons.arrow_back,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+                color: Color(0xFF333333),
+                size: 30.0,
               ),
               onPressed: () async {
                 context.pushNamed('HomePageAdmin');
@@ -168,12 +170,12 @@ class _AddElementCatalogAdminWidgetState
                       child: Align(
                         alignment: AlignmentDirectional(0.00, 0.00),
                         child: Text(
-                          'Agregar nuevo catalogo',
+                          'Agregar nuevo catálogo',
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
                               .override(
                                 fontFamily: 'Barlow',
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Colors.black,
                                 fontSize: 25.0,
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
@@ -192,7 +194,7 @@ class _AddElementCatalogAdminWidgetState
                     children: [
                       Container(
                         width: MediaQuery.sizeOf(context).width * 1.0,
-                        height: 520.0,
+                        height: 555.0,
                         decoration: BoxDecoration(
                           color: FlutterFlowTheme.of(context).primary,
                           borderRadius: BorderRadius.circular(20.0),
@@ -434,7 +436,7 @@ class _AddElementCatalogAdminWidgetState
                                                 borderRadius:
                                                     BorderRadius.circular(8.0),
                                                 child: Image.network(
-                                                  'https://picsum.photos/seed/248/600',
+                                                  _model.uploadedFileUrl,
                                                   width: 300.0,
                                                   height: 200.0,
                                                   fit: BoxFit.cover,
@@ -447,7 +449,7 @@ class _AddElementCatalogAdminWidgetState
                                     ),
                                     Padding(
                                       padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 365.0, 0.0, 0.0),
+                                          0.0, 368.0, 0.0, 0.0),
                                       child: Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
@@ -490,10 +492,9 @@ class _AddElementCatalogAdminWidgetState
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
                                                       width: 2.0,
                                                     ),
                                                     borderRadius:
@@ -603,10 +604,9 @@ class _AddElementCatalogAdminWidgetState
                                                   enabledBorder:
                                                       OutlineInputBorder(
                                                     borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .secondaryText,
+                                                      color: FlutterFlowTheme
+                                                              .of(context)
+                                                          .primaryBackground,
                                                       width: 2.0,
                                                     ),
                                                     borderRadius:

@@ -23,6 +23,10 @@ class EditAppointmentUserModel
   FocusNode? txtDetailsFocusNode;
   TextEditingController? txtDetailsController;
   String? Function(BuildContext, String?)? txtDetailsControllerValidator;
+  // State field(s) for txtDateTime widget.
+  FocusNode? txtDateTimeFocusNode;
+  TextEditingController? txtDateTimeController;
+  String? Function(BuildContext, String?)? txtDateTimeControllerValidator;
   DateTime? datePicked;
   // State field(s) for DropDown widget.
   String? dropDownValue;
@@ -40,6 +44,9 @@ class EditAppointmentUserModel
     unfocusNode.dispose();
     txtDetailsFocusNode?.dispose();
     txtDetailsController?.dispose();
+
+    txtDateTimeFocusNode?.dispose();
+    txtDateTimeController?.dispose();
 
     txtUserNameFocusNode?.dispose();
     txtUserNameController?.dispose();

@@ -4,7 +4,9 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
@@ -28,6 +30,11 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
     super.initState();
     _model = createModel(context, () => MyAccountModel());
 
+    // On page load action.
+    SchedulerBinding.instance.addPostFrameCallback((_) async {
+      await currentUserReference!.delete();
+    });
+
     _model.txtCorreoController1 ??=
         TextEditingController(text: currentUserDisplayName);
     _model.txtCorreoFocusNode1 ??= FocusNode();
@@ -39,6 +46,8 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
     _model.txtCorreoController3 ??=
         TextEditingController(text: currentPhoneNumber);
     _model.txtCorreoFocusNode3 ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -251,7 +260,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
                 Icons.menu,
-                color: FlutterFlowTheme.of(context).primary,
+                color: FlutterFlowTheme.of(context).primaryText,
                 size: 40.0,
               ),
               onPressed: () async {
@@ -264,7 +273,7 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
             child: ClipRRect(
               borderRadius: BorderRadius.circular(8.0),
               child: Image.asset(
-                'assets/images/LogoRotulosWhite.png',
+                'assets/images/LogoRotulosBlack.png',
                 width: MediaQuery.sizeOf(context).width * 1.0,
                 height: 45.0,
                 fit: BoxFit.contain,
@@ -314,44 +323,45 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                       decoration: BoxDecoration(
                         color: FlutterFlowTheme.of(context).tertiary,
                       ),
-                      child: Stack(
-                        children: [
-                          Align(
-                            alignment: AlignmentDirectional(0.00, 0.00),
-                            child: Text(
-                              'Tu Cuenta',
-                              style: FlutterFlowTheme.of(context)
-                                  .headlineMedium
-                                  .override(
-                                    fontFamily: 'Barlow',
-                                    color: FlutterFlowTheme.of(context).primary,
-                                    fontSize: 25.0,
-                                    fontWeight: FontWeight.w900,
-                                    fontStyle: FontStyle.italic,
-                                    useGoogleFonts: false,
-                                  ),
-                            ),
-                          ),
-                          Align(
-                            alignment: AlignmentDirectional(-0.98, 0.00),
-                            child: FlutterFlowIconButton(
-                              borderColor: Color(0x00B0E2FF),
-                              borderRadius: 20.0,
-                              borderWidth: 1.0,
-                              buttonSize:
-                                  MediaQuery.sizeOf(context).width * 0.15,
-                              fillColor: Color(0x00B0E2FF),
-                              icon: Icon(
-                                Icons.arrow_back,
-                                color: FlutterFlowTheme.of(context).primaryText,
-                                size: 24.0,
+                      child: Align(
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        child: Stack(
+                          children: [
+                            Align(
+                              alignment: AlignmentDirectional(0.15, 0.10),
+                              child: Text(
+                                'Tu Cuenta',
+                                style: FlutterFlowTheme.of(context)
+                                    .headlineMedium
+                                    .override(
+                                      fontFamily: 'Barlow',
+                                      color: Colors.black,
+                                      fontSize: 25.0,
+                                      fontWeight: FontWeight.bold,
+                                      fontStyle: FontStyle.italic,
+                                      useGoogleFonts: false,
+                                    ),
                               ),
-                              onPressed: () async {
-                                context.pushNamed('HomePageUser');
-                              },
                             ),
-                          ),
-                        ],
+                            Align(
+                              alignment: AlignmentDirectional(-1.00, 0.00),
+                              child: FlutterFlowIconButton(
+                                borderRadius: 20.0,
+                                borderWidth: 1.0,
+                                buttonSize: 55.0,
+                                fillColor: Color(0x00B0E2FF),
+                                icon: Icon(
+                                  Icons.arrow_back,
+                                  color: FlutterFlowTheme.of(context).primary,
+                                  size: 24.0,
+                                ),
+                                onPressed: () async {
+                                  context.pushNamed('HomePageUser');
+                                },
+                              ),
+                            ),
+                          ],
+                        ),
                       ),
                     ),
                   ],
@@ -700,8 +710,16 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                                         padding: EdgeInsetsDirectional.fromSTEB(
                                             0.0, 0.0, 0.0, 35.0),
                                         child: FFButtonWidget(
-                                          onPressed: () {
-                                            print('Button pressed ...');
+                                          onPressed: () async {
+                                            await columnUsersRecord!.reference
+                                                .update(createUsersRecordData(
+                                              email: _model
+                                                  .txtCorreoController2.text,
+                                              displayName: _model
+                                                  .txtCorreoController1.text,
+                                              phoneNumber: _model
+                                                  .txtCorreoController3.text,
+                                            ));
                                           },
                                           text: 'Actualizar',
                                           options: FFButtonOptions(
@@ -735,15 +753,55 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                                       ),
                                       FFButtonWidget(
                                         onPressed: () async {
-                                          await authManager.deleteUser(context);
-                                          GoRouter.of(context)
-                                              .prepareAuthEvent();
-                                          await authManager.signOut();
-                                          GoRouter.of(context)
-                                              .clearRedirectLocation();
+                                          var confirmDialogResponse =
+                                              await showDialog<bool>(
+                                                    context: context,
+                                                    builder:
+                                                        (alertDialogContext) {
+                                                      return AlertDialog(
+                                                        title: Text(
+                                                            '¿Esta seguro que quiere eliminar su cuenta?'),
+                                                        content: Text(
+                                                            'Este cambio es permanente.'),
+                                                        actions: [
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext,
+                                                                    false),
+                                                            child:
+                                                                Text('Volver'),
+                                                          ),
+                                                          TextButton(
+                                                            onPressed: () =>
+                                                                Navigator.pop(
+                                                                    alertDialogContext,
+                                                                    true),
+                                                            child: Text(
+                                                                'Confirmar'),
+                                                          ),
+                                                        ],
+                                                      );
+                                                    },
+                                                  ) ??
+                                                  false;
+                                          if (confirmDialogResponse) {
+                                            await columnUsersRecord!.reference
+                                                .delete();
+                                            await authManager
+                                                .deleteUser(context);
+                                            GoRouter.of(context)
+                                                .prepareAuthEvent();
+                                            await authManager.signOut();
+                                            GoRouter.of(context)
+                                                .clearRedirectLocation();
 
-                                          context.goNamedAuth(
-                                              'Login', context.mounted);
+                                            context.pushNamedAuth(
+                                                'Login', context.mounted);
+                                          } else {
+                                            context.pushNamedAuth(
+                                                'MyAccount', context.mounted);
+                                          }
                                         },
                                         text: 'Eliminar Cuenta',
                                         options: FFButtonOptions(

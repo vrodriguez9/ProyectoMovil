@@ -1,10 +1,12 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -31,8 +33,13 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
     super.initState();
     _model = createModel(context, () => AddAppointmentAdminModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.txtNombreUsuarioController ??= TextEditingController();
+    _model.txtNombreUsuarioFocusNode ??= FocusNode();
+
+    _model.txtDescripcionController ??= TextEditingController();
+    _model.txtDescripcionFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -74,7 +81,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
               icon: Icon(
                 Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+                size: 30.0,
               ),
               onPressed: () async {
                 context.pushNamed('AppointmentsAdmin');
@@ -166,7 +173,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                               .headlineMedium
                               .override(
                                 fontFamily: 'Barlow',
-                                color: FlutterFlowTheme.of(context).primary,
+                                color: Colors.black,
                                 fontSize: 25.0,
                                 fontWeight: FontWeight.w900,
                                 fontStyle: FontStyle.italic,
@@ -218,7 +225,12 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                         'Nueva Cita',
                                         textAlign: TextAlign.center,
                                         style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              fontSize: 16.0,
+                                              fontWeight: FontWeight.bold,
+                                            ),
                                       ),
                                     ),
                                   ),
@@ -237,9 +249,12 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                       padding: EdgeInsetsDirectional.fromSTEB(
                                           35.0, 0.0, 35.0, 0.0),
                                       child: TextFormField(
-                                        controller: _model.textController,
-                                        focusNode: _model.textFieldFocusNode,
-                                        autofocus: true,
+                                        controller:
+                                            _model.txtNombreUsuarioController,
+                                        focusNode:
+                                            _model.txtNombreUsuarioFocusNode,
+                                        textCapitalization:
+                                            TextCapitalization.none,
                                         obscureText: false,
                                         decoration: InputDecoration(
                                           labelText: 'Nombre Completo',
@@ -294,7 +309,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                         style: FlutterFlowTheme.of(context)
                                             .bodyMedium,
                                         validator: _model
-                                            .textControllerValidator
+                                            .txtNombreUsuarioControllerValidator
                                             .asValidator(context),
                                       ),
                                     ),
@@ -313,7 +328,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                   Text(
                                     valueOrDefault<String>(
                                       dateTimeFormat(
-                                          'd/M/y', _model.datePicked1),
+                                          'd/M h:mm a', _model.datePicked),
                                       '01/01/2024',
                                     ),
                                     style:
@@ -321,7 +336,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                   ),
                                   FFButtonWidget(
                                     onPressed: () async {
-                                      final _datePicked1Date =
+                                      final _datePickedDate =
                                           await showDatePicker(
                                         context: context,
                                         initialDate: getCurrentTimestamp,
@@ -329,12 +344,24 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                         lastDate: DateTime(2050),
                                       );
 
-                                      if (_datePicked1Date != null) {
+                                      TimeOfDay? _datePickedTime;
+                                      if (_datePickedDate != null) {
+                                        _datePickedTime = await showTimePicker(
+                                          context: context,
+                                          initialTime: TimeOfDay.fromDateTime(
+                                              getCurrentTimestamp),
+                                        );
+                                      }
+
+                                      if (_datePickedDate != null &&
+                                          _datePickedTime != null) {
                                         safeSetState(() {
-                                          _model.datePicked1 = DateTime(
-                                            _datePicked1Date.year,
-                                            _datePicked1Date.month,
-                                            _datePicked1Date.day,
+                                          _model.datePicked = DateTime(
+                                            _datePickedDate.year,
+                                            _datePickedDate.month,
+                                            _datePickedDate.day,
+                                            _datePickedTime!.hour,
+                                            _datePickedTime.minute,
                                           );
                                         });
                                       }
@@ -373,88 +400,101 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                 ],
                               ),
                             ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 220.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment:
-                                    MainAxisAlignment.spaceEvenly,
-                                children: [
-                                  Text(
-                                    valueOrDefault<String>(
-                                      dateTimeFormat('jm', _model.datePicked2),
-                                      '9:00 PM',
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                  ),
-                                  FFButtonWidget(
-                                    onPressed: () async {
-                                      final _datePicked2Time =
-                                          await showTimePicker(
-                                        context: context,
-                                        initialTime: TimeOfDay.fromDateTime(
-                                            getCurrentTimestamp),
-                                      );
-                                      if (_datePicked2Time != null) {
-                                        safeSetState(() {
-                                          _model.datePicked2 = DateTime(
-                                            getCurrentTimestamp.year,
-                                            getCurrentTimestamp.month,
-                                            getCurrentTimestamp.day,
-                                            _datePicked2Time.hour,
-                                            _datePicked2Time.minute,
-                                          );
-                                        });
-                                      }
-                                    },
-                                    text: 'Hora',
-                                    icon: Icon(
-                                      Icons.access_time_sharp,
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      size: 15.0,
-                                    ),
-                                    options: FFButtonOptions(
-                                      height: 40.0,
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          24.0, 0.0, 24.0, 0.0),
-                                      iconPadding:
-                                          EdgeInsetsDirectional.fromSTEB(
-                                              0.0, 0.0, 0.0, 0.0),
-                                      color:
-                                          FlutterFlowTheme.of(context).accent1,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .titleSmall
-                                          .override(
-                                            fontFamily: 'Readex Pro',
-                                            color: Colors.white,
+                            Align(
+                              alignment: AlignmentDirectional(0.00, 0.00),
+                              child: Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 90.0, 0.0, 0.0),
+                                child: Row(
+                                  mainAxisSize: MainAxisSize.max,
+                                  children: [
+                                    Expanded(
+                                      child: Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            35.0, 0.0, 35.0, 0.0),
+                                        child: TextFormField(
+                                          controller:
+                                              _model.txtDescripcionController,
+                                          focusNode:
+                                              _model.txtDescripcionFocusNode,
+                                          textCapitalization:
+                                              TextCapitalization.none,
+                                          obscureText: false,
+                                          decoration: InputDecoration(
+                                            labelText: 'Descripción',
+                                            labelStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium,
+                                            hintStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .labelMedium,
+                                            enabledBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryBackground,
+                                                width: 2.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            focusedBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .secondary,
+                                                width: 2.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            errorBorder: OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                                width: 2.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
+                                            focusedErrorBorder:
+                                                OutlineInputBorder(
+                                              borderSide: BorderSide(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .error,
+                                                width: 2.0,
+                                              ),
+                                              borderRadius:
+                                                  BorderRadius.circular(8.0),
+                                            ),
                                           ),
-                                      elevation: 3.0,
-                                      borderSide: BorderSide(
-                                        color: FlutterFlowTheme.of(context)
-                                            .accent1,
-                                        width: 1.0,
+                                          style: FlutterFlowTheme.of(context)
+                                              .bodyMedium,
+                                          maxLines: 2,
+                                          validator: _model
+                                              .txtDescripcionControllerValidator
+                                              .asValidator(context),
+                                        ),
                                       ),
-                                      borderRadius: BorderRadius.circular(15.0),
                                     ),
-                                  ),
-                                ],
+                                  ],
+                                ),
                               ),
                             ),
                             Align(
                               alignment: AlignmentDirectional(0.00, 1.00),
                               child: Padding(
                                 padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 40.0),
+                                    0.0, 0.0, 0.0, 30.0),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
                                     FlutterFlowDropDown<String>(
                                       controller:
-                                          _model.dropDownValueController ??=
+                                          _model.ddEstadoValueController ??=
                                               FormFieldController<String>(null),
                                       options: [
                                         'Confirmada',
@@ -462,7 +502,7 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                                         'Pendiente'
                                       ],
                                       onChanged: (val) => setState(
-                                          () => _model.dropDownValue = val),
+                                          () => _model.ddEstadoValue = val),
                                       width: 300.0,
                                       height: 50.0,
                                       textStyle: FlutterFlowTheme.of(context)
@@ -498,14 +538,23 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                   ),
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 10.0, 0.0, 0.0),
                   child: Row(
                     mainAxisSize: MainAxisSize.max,
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          await CitasRecord.collection
+                              .doc()
+                              .set(createCitasRecordData(
+                                descripcion:
+                                    _model.txtDescripcionController.text,
+                                nombreUsuario:
+                                    _model.txtNombreUsuarioController.text,
+                                fecha: _model.datePicked,
+                                estado: _model.ddEstadoValue,
+                              ));
                         },
                         text: 'Aceptar',
                         icon: Icon(

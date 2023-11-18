@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,6 +34,8 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
 
     _model.txtBuscarController ??= TextEditingController();
     _model.txtBuscarFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -276,12 +279,20 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
               buttonSize: MediaQuery.sizeOf(context).width * 0.15,
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
-                Icons.menu,
-                color: FlutterFlowTheme.of(context).primaryText,
-                size: 40.0,
+                Icons.arrow_back,
+                color: Color(0xFF333333),
+                size: 30.0,
               ),
               onPressed: () async {
-                scaffoldKey.currentState!.openDrawer();
+                context.pushNamed(
+                  'HomePageAdmin',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
               },
             ),
           ),
@@ -444,7 +455,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                     color: FlutterFlowTheme.of(context)
                                         .primaryText,
                                     fontSize: 25.0,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
                                     useGoogleFonts: false,
                                   ),
@@ -456,11 +467,11 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                               padding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 15.0, 0.0),
                               child: FlutterFlowDropDown<String>(
-                                controller: _model.dropDownValueController ??=
+                                controller: _model.ddFiltrarValueController ??=
                                     FormFieldController<String>(null),
                                 options: ['Mes', 'Anio', 'Pendientes'],
                                 onChanged: (val) =>
-                                    setState(() => _model.dropDownValue = val),
+                                    setState(() => _model.ddFiltrarValue = val),
                                 width: 100.0,
                                 height: 40.0,
                                 textStyle: FlutterFlowTheme.of(context)
@@ -497,7 +508,8 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                             },
                             text: 'Agregar',
                             icon: Icon(
-                              Icons.add,
+                              Icons.add_sharp,
+                              color: Colors.white,
                               size: 15.0,
                             ),
                             options: FFButtonOptions(
@@ -506,7 +518,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                   0.0, 0.0, 0.0, 0.0),
                               iconPadding: EdgeInsetsDirectional.fromSTEB(
                                   0.0, 0.0, 0.0, 0.0),
-                              color: FlutterFlowTheme.of(context).tertiary,
+                              color: FlutterFlowTheme.of(context).accent1,
                               textStyle: FlutterFlowTheme.of(context)
                                   .titleSmall
                                   .override(
@@ -515,10 +527,10 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                   ),
                               elevation: 3.0,
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).tertiary,
+                                color: FlutterFlowTheme.of(context).secondary,
                                 width: 1.0,
                               ),
-                              borderRadius: BorderRadius.circular(15.0),
+                              borderRadius: BorderRadius.circular(10.0),
                             ),
                           ),
                         ],
@@ -567,7 +579,22 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                 width: 288.0,
                                 height: 305.0,
                                 decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context).primary,
+                                  image: DecorationImage(
+                                    fit: BoxFit.cover,
+                                    image: Image.network(
+                                      'https://images.unsplash.com/photo-1435527173128-983b87201f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwzfHwlMjBjaXRhfGVufDB8fHx8MTcwMDI1MzEwNnww&ixlib=rb-4.0.3&q=80&w=1080',
+                                    ).image,
+                                  ),
+                                  gradient: LinearGradient(
+                                    colors: [
+                                      FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      FlutterFlowTheme.of(context).secondaryText
+                                    ],
+                                    stops: [0.0, 1.0],
+                                    begin: AlignmentDirectional(0.0, -1.0),
+                                    end: AlignmentDirectional(0, 1.0),
+                                  ),
                                   borderRadius: BorderRadius.circular(20.0),
                                 ),
                                 child: Stack(
@@ -589,6 +616,12 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                               color:
                                                   FlutterFlowTheme.of(context)
                                                       .tertiary,
+                                              image: DecorationImage(
+                                                fit: BoxFit.cover,
+                                                image: Image.network(
+                                                  '',
+                                                ).image,
+                                              ),
                                               borderRadius: BorderRadius.only(
                                                 bottomLeft:
                                                     Radius.circular(0.0),
@@ -614,7 +647,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                                             'Readex Pro',
                                                         fontSize: 24.0,
                                                         fontWeight:
-                                                            FontWeight.w900,
+                                                            FontWeight.bold,
                                                       ),
                                                 ),
                                                 Flexible(
@@ -630,7 +663,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                                               'Readex Pro',
                                                           fontSize: 24.0,
                                                           fontWeight:
-                                                              FontWeight.w900,
+                                                              FontWeight.bold,
                                                         ),
                                                   ),
                                                 ),
@@ -648,114 +681,156 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                         mainAxisAlignment:
                                             MainAxisAlignment.center,
                                         children: [
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Row(
-                                                mainAxisSize: MainAxisSize.max,
-                                                children: [
-                                                  Text(
-                                                    'Fecha Programada: ',
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 15.0,
-                                                        ),
-                                                  ),
-                                                  Text(
-                                                    dateTimeFormat(
-                                                        'd/M h:mm a',
-                                                        listViewCitasRecord
-                                                            .fecha!),
-                                                    style: FlutterFlowTheme.of(
-                                                            context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 15.0,
-                                                        ),
-                                                  ),
-                                                ],
+                                          Flexible(
+                                            child: ClipRRect(
+                                              borderRadius: BorderRadius.only(
+                                                bottomLeft:
+                                                    Radius.circular(15.0),
+                                                bottomRight:
+                                                    Radius.circular(15.0),
+                                                topLeft: Radius.circular(0.0),
+                                                topRight: Radius.circular(0.0),
                                               ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 25.0, 0.0, 0.0),
-                                                child: Row(
+                                              child: BackdropFilter(
+                                                filter: ImageFilter.blur(
+                                                  sigmaX: 5.0,
+                                                  sigmaY: 7.0,
+                                                ),
+                                                child: Column(
                                                   mainAxisSize:
                                                       MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.start,
                                                   children: [
-                                                    Text(
-                                                      'Descripción: ',
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
+                                                    Row(
+                                                      mainAxisSize:
+                                                          MainAxisSize.max,
+                                                      mainAxisAlignment:
+                                                          MainAxisAlignment
+                                                              .center,
+                                                      children: [
+                                                        Text(
+                                                          'Fecha Programada: ',
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
                                                               .bodyMedium
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
                                                                 fontSize: 15.0,
                                                               ),
+                                                        ),
+                                                        Text(
+                                                          dateTimeFormat(
+                                                              'd/M h:mm a',
+                                                              listViewCitasRecord
+                                                                  .fecha!),
+                                                          style: FlutterFlowTheme
+                                                                  .of(context)
+                                                              .bodyMedium
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                fontSize: 15.0,
+                                                              ),
+                                                        ),
+                                                      ],
                                                     ),
-                                                    Text(
-                                                      listViewCitasRecord
-                                                          .descripcion,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                fontSize: 15.0,
-                                                              ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  25.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'Descripción: ',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            listViewCitasRecord
+                                                                .descripcion,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                    ),
+                                                    Padding(
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  25.0,
+                                                                  0.0,
+                                                                  0.0),
+                                                      child: Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'Estado: ',
+                                                            textAlign: TextAlign
+                                                                .center,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            listViewCitasRecord
+                                                                .estado,
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                  fontWeight:
+                                                                      FontWeight
+                                                                          .bold,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
                                                     ),
                                                   ],
                                                 ),
                                               ),
-                                              Padding(
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        0.0, 25.0, 0.0, 0.0),
-                                                child: Row(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  children: [
-                                                    Text(
-                                                      'Estado: ',
-                                                      textAlign:
-                                                          TextAlign.center,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                fontSize: 15.0,
-                                                              ),
-                                                    ),
-                                                    Text(
-                                                      listViewCitasRecord
-                                                          .estado,
-                                                      style:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                fontSize: 15.0,
-                                                              ),
-                                                    ),
-                                                  ],
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),
@@ -774,7 +849,18 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                             FFButtonWidget(
                                               onPressed: () async {
                                                 context.pushNamed(
-                                                    'EditAppointmentAdmin');
+                                                  'EditAppointmentAdmin',
+                                                  queryParameters: {
+                                                    'pCita': serializeParam(
+                                                      listViewCitasRecord,
+                                                      ParamType.Document,
+                                                    ),
+                                                  }.withoutNulls,
+                                                  extra: <String, dynamic>{
+                                                    'pCita':
+                                                        listViewCitasRecord,
+                                                  },
+                                                );
                                               },
                                               text: 'Editar',
                                               options: FFButtonOptions(

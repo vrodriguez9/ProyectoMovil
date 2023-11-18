@@ -31,6 +31,8 @@ class _QuotesWidgetState extends State<QuotesWidget> {
 
     _model.textController ??= TextEditingController();
     _model.textFieldFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -274,12 +276,20 @@ class _QuotesWidgetState extends State<QuotesWidget> {
               buttonSize: MediaQuery.sizeOf(context).width * 0.15,
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
-                Icons.menu,
+                Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 40.0,
+                size: 30.0,
               ),
               onPressed: () async {
-                scaffoldKey.currentState!.openDrawer();
+                context.pushNamed(
+                  'HomePageAdmin',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
               },
             ),
           ),
@@ -606,9 +616,8 @@ class _QuotesWidgetState extends State<QuotesWidget> {
                                             MainAxisAlignment.center,
                                         children: [
                                           FFButtonWidget(
-                                            onPressed: () async {
-                                              context.pushNamed(
-                                                  'EditAppointmentAdmin');
+                                            onPressed: () {
+                                              print('Button pressed ...');
                                             },
                                             text: 'Editar',
                                             options: FFButtonOptions(
@@ -741,9 +750,8 @@ class _QuotesWidgetState extends State<QuotesWidget> {
                                             MainAxisAlignment.center,
                                         children: [
                                           FFButtonWidget(
-                                            onPressed: () async {
-                                              context.pushNamed(
-                                                  'EditAppointmentAdmin');
+                                            onPressed: () {
+                                              print('Button pressed ...');
                                             },
                                             text: 'Editar',
                                             options: FFButtonOptions(

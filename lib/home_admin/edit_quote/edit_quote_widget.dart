@@ -28,6 +28,8 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
   void initState() {
     super.initState();
     _model = createModel(context, () => EditQuoteModel());
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -69,7 +71,7 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
               icon: Icon(
                 Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+                size: 30.0,
               ),
               onPressed: () async {
                 context.pushNamed('HomePageAdmin');
@@ -163,7 +165,7 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                                 fontFamily: 'Barlow',
                                 color: FlutterFlowTheme.of(context).primary,
                                 fontSize: 25.0,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,
                                 useGoogleFonts: false,
                               ),

@@ -80,13 +80,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
       debugLogDiagnostics: true,
       refreshListenable: appStateNotifier,
       errorBuilder: (context, state) =>
-          appStateNotifier.loggedIn ? HomePageUserWidget() : LoginWidget(),
+          appStateNotifier.loggedIn ? LoginWidget() : LoginWidget(),
       routes: [
         FFRoute(
           name: '_initialize',
           path: '/',
           builder: (context, _) =>
-              appStateNotifier.loggedIn ? HomePageUserWidget() : LoginWidget(),
+              appStateNotifier.loggedIn ? LoginWidget() : LoginWidget(),
         ),
         FFRoute(
           name: 'Login',
@@ -121,11 +121,6 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'HomePageUser',
-          path: '/homePageUser',
-          builder: (context, params) => HomePageUserWidget(),
-        ),
-        FFRoute(
           name: 'EditElementCatalog',
           path: '/editElementCatalog',
           asyncParams: {
@@ -148,7 +143,12 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'EditAppointmentAdmin',
           path: '/editAppointmentAdmin',
-          builder: (context, params) => EditAppointmentAdminWidget(),
+          asyncParams: {
+            'pCita': getDoc(['citas'], CitasRecord.fromSnapshot),
+          },
+          builder: (context, params) => EditAppointmentAdminWidget(
+            pCita: params.getParam('pCita', ParamType.Document),
+          ),
         ),
         FFRoute(
           name: 'AddAppointmentAdmin',
@@ -192,16 +192,31 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
           ),
         ),
         FFRoute(
-          name: 'HomePageUserCopy',
-          path: '/homePageUserCopy',
-          builder: (context, params) => HomePageUserCopyWidget(),
-        ),
-        FFRoute(
-          name: 'HomePageUserListo',
-          path: '/homePageUserListo',
-          builder: (context, params) => HomePageUserListoWidget(
+          name: 'HomePageUser',
+          path: '/homePageUser',
+          builder: (context, params) => HomePageUserWidget(
             ofertas: params.getParam('ofertas', ParamType.String),
           ),
+        ),
+        FFRoute(
+          name: 'CotizacionUser',
+          path: '/cotizacionUser',
+          builder: (context, params) => CotizacionUserWidget(),
+        ),
+        FFRoute(
+          name: 'OfertasUser',
+          path: '/ofertasUser',
+          builder: (context, params) => OfertasUserWidget(),
+        ),
+        FFRoute(
+          name: 'RotulacionesUser',
+          path: '/rotulacionesUser',
+          builder: (context, params) => RotulacionesUserWidget(),
+        ),
+        FFRoute(
+          name: 'DisenosUser',
+          path: '/disenosUser',
+          builder: (context, params) => DisenosUserWidget(),
         )
       ].map((r) => r.toRoute(appStateNotifier)).toList(),
     );

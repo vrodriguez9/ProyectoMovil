@@ -48,9 +48,15 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
         TextEditingController(text: widget.descripcion?.descripcion);
     _model.txtDetailsFocusNode ??= FocusNode();
 
+    _model.txtDateTimeController ??= TextEditingController(
+        text: dateTimeFormat('d/M H:mm', widget.fecha?.fecha));
+    _model.txtDateTimeFocusNode ??= FocusNode();
+
     _model.txtUserNameController ??=
         TextEditingController(text: widget.nombreUsuario?.nombreUsuario);
     _model.txtUserNameFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -91,11 +97,19 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
                 Icons.arrow_back,
-                color: FlutterFlowTheme.of(context).primary,
-                size: 24.0,
+                color: FlutterFlowTheme.of(context).primaryText,
+                size: 30.0,
               ),
               onPressed: () async {
-                context.pushNamed('AppointmentsUser');
+                context.pushNamed(
+                  'AppointmentsUser',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
               },
             ),
           ),
@@ -257,7 +271,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                         children: [
                           Container(
                             width: MediaQuery.sizeOf(context).width * 1.0,
-                            height: 300.0,
+                            height: 309.0,
                             decoration: BoxDecoration(
                               color: FlutterFlowTheme.of(context).primary,
                               borderRadius: BorderRadius.circular(20.0),
@@ -294,7 +308,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                                 .bodyMedium
                                                 .override(
                                                   fontFamily: 'Readex Pro',
-                                                  fontSize: 17.5,
+                                                  fontSize: 20.0,
                                                 ),
                                           ),
                                         ),
@@ -390,18 +404,78 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      Padding(
-                                        padding: EdgeInsetsDirectional.fromSTEB(
-                                            13.0, 0.0, 0.0, 0.0),
-                                        child: Text(
-                                          dateTimeFormat('d/M h:mm a',
-                                              widget.fecha!.fecha!),
-                                          style: FlutterFlowTheme.of(context)
-                                              .bodyMedium
-                                              .override(
-                                                fontFamily: 'Readex Pro',
-                                                color: Color(0xFF666666),
+                                      Expanded(
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 10.0, 0.0),
+                                          child: TextFormField(
+                                            controller:
+                                                _model.txtDateTimeController,
+                                            focusNode:
+                                                _model.txtDateTimeFocusNode,
+                                            autofocus: true,
+                                            readOnly: true,
+                                            obscureText: false,
+                                            decoration: InputDecoration(
+                                              labelText:
+                                                  'Fecha y Hora Anterior',
+                                              labelStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium,
+                                              hintText:
+                                                  'Fecha y Hora Selecciónada',
+                                              hintStyle:
+                                                  FlutterFlowTheme.of(context)
+                                                      .labelMedium,
+                                              enabledBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .primaryBackground,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
                                               ),
+                                              focusedBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .secondary,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              errorBorder: OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .error,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                              focusedErrorBorder:
+                                                  OutlineInputBorder(
+                                                borderSide: BorderSide(
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .error,
+                                                  width: 2.0,
+                                                ),
+                                                borderRadius:
+                                                    BorderRadius.circular(8.0),
+                                              ),
+                                            ),
+                                            style: FlutterFlowTheme.of(context)
+                                                .bodyMedium,
+                                            validator: _model
+                                                .txtDateTimeControllerValidator
+                                                .asValidator(context),
+                                          ),
                                         ),
                                       ),
                                       FFButtonWidget(
@@ -438,7 +512,11 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                             });
                                           }
                                         },
-                                        text: 'Fecha',
+                                        text: valueOrDefault<String>(
+                                          dateTimeFormat(
+                                              'd/M h:mm a', _model.datePicked),
+                                          'Establecer Fecha',
+                                        ),
                                         icon: Icon(
                                           Icons.calendar_today,
                                           color: FlutterFlowTheme.of(context)
@@ -446,7 +524,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                           size: 15.0,
                                         ),
                                         options: FFButtonOptions(
-                                          height: 40.0,
+                                          height: 50.0,
                                           padding:
                                               EdgeInsetsDirectional.fromSTEB(
                                                   24.0, 0.0, 24.0, 0.0),
@@ -469,7 +547,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                             width: 1.0,
                                           ),
                                           borderRadius:
-                                              BorderRadius.circular(15.0),
+                                              BorderRadius.circular(10.0),
                                         ),
                                       ),
                                     ],
@@ -477,24 +555,22 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                 ),
                                 Padding(
                                   padding: EdgeInsetsDirectional.fromSTEB(
-                                      35.0, 230.0, 35.0, 0.0),
+                                      35.0, 240.0, 35.0, 0.0),
                                   child: Row(
                                     mainAxisSize: MainAxisSize.max,
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceEvenly,
                                     children: [
                                       FlutterFlowDropDown<String>(
-                                        controller: _model
-                                                .dropDownValueController ??=
-                                            FormFieldController<String>(null),
-                                        options: [
-                                          'Confirmada',
-                                          'Cancelada',
-                                          'Pendiente'
-                                        ],
+                                        controller:
+                                            _model.dropDownValueController ??=
+                                                FormFieldController<String>(
+                                          _model.dropDownValue ??= 'Pendiente',
+                                        ),
+                                        options: ['Pendiente'],
                                         onChanged: (val) => setState(
                                             () => _model.dropDownValue = val),
-                                        width: 322.0,
+                                        width: 360.0,
                                         height: 50.0,
                                         textStyle: FlutterFlowTheme.of(context)
                                             .bodyMedium,
@@ -540,6 +616,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                             focusNode:
                                                 _model.txtUserNameFocusNode,
                                             autofocus: true,
+                                            readOnly: true,
                                             obscureText: false,
                                             decoration: InputDecoration(
                                               labelText: 'Nombre Completo',

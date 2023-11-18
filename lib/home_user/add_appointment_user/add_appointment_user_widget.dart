@@ -40,6 +40,8 @@ class _AddAppointmentUserWidgetState extends State<AddAppointmentUserWidget> {
     _model.txtUserNameController ??=
         TextEditingController(text: currentUserDisplayName);
     _model.txtUserNameFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -80,11 +82,19 @@ class _AddAppointmentUserWidgetState extends State<AddAppointmentUserWidget> {
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
                 Icons.arrow_back,
-                color: FlutterFlowTheme.of(context).primary,
-                size: 24.0,
+                color: FlutterFlowTheme.of(context).primaryText,
+                size: 30.0,
               ),
               onPressed: () async {
-                context.pushNamed('AppointmentsAdmin');
+                context.pushNamed(
+                  'AppointmentsUser',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
               },
             ),
           ),
@@ -412,11 +422,7 @@ class _AddAppointmentUserWidgetState extends State<AddAppointmentUserWidget> {
                                     controller:
                                         _model.dropDownValueController ??=
                                             FormFieldController<String>(null),
-                                    options: [
-                                      'Confirmada',
-                                      'Cancelada',
-                                      'Pendiente'
-                                    ],
+                                    options: ['Pendiente'],
                                     onChanged: (val) => setState(
                                         () => _model.dropDownValue = val),
                                     width: 322.0,
@@ -464,12 +470,13 @@ class _AddAppointmentUserWidgetState extends State<AddAppointmentUserWidget> {
                                           focusNode:
                                               _model.txtUserNameFocusNode,
                                           autofocus: true,
+                                          readOnly: true,
                                           obscureText: false,
                                           decoration: InputDecoration(
                                             labelText: 'Nombre Completo',
                                             labelStyle:
                                                 FlutterFlowTheme.of(context)
-                                                    .labelMedium,
+                                                    .bodyMedium,
                                             hintStyle:
                                                 FlutterFlowTheme.of(context)
                                                     .labelMedium,

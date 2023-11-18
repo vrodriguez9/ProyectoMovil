@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'dart:ui';
 import 'appointments_admin_widget.dart' show AppointmentsAdminWidget;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -20,9 +21,9 @@ class AppointmentsAdminModel extends FlutterFlowModel<AppointmentsAdminWidget> {
   FocusNode? txtBuscarFocusNode;
   TextEditingController? txtBuscarController;
   String? Function(BuildContext, String?)? txtBuscarControllerValidator;
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
+  // State field(s) for ddFiltrar widget.
+  String? ddFiltrarValue;
+  FormFieldController<String>? ddFiltrarValueController;
 
   /// Initialization and disposal methods.
 

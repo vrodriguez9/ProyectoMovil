@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/upload_data.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -44,6 +45,8 @@ class _SignUpWidgetState extends State<SignUpWidget> {
 
     _model.txtRepetirContraseniaController ??= TextEditingController();
     _model.txtRepetirContraseniaFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -70,7 +73,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
           : FocusScope.of(context).unfocus(),
       child: Scaffold(
         key: scaffoldKey,
-        backgroundColor: FlutterFlowTheme.of(context).primary,
+        backgroundColor: FlutterFlowTheme.of(context).primaryBackground,
         appBar: AppBar(
           backgroundColor: FlutterFlowTheme.of(context).tertiary,
           iconTheme:
@@ -83,12 +86,12 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                 borderColor: Color(0x00F2F2F2),
                 borderRadius: 20.0,
                 borderWidth: 1.0,
-                buttonSize: 40.0,
+                buttonSize: MediaQuery.sizeOf(context).width * 0.15,
                 fillColor: Color(0x00FF6666),
                 icon: Icon(
                   Icons.arrow_back,
-                  color: FlutterFlowTheme.of(context).primary,
-                  size: 24.0,
+                  color: FlutterFlowTheme.of(context).primaryText,
+                  size: 25.0,
                 ),
                 onPressed: () async {
                   context.pushNamed('Login');
@@ -132,7 +135,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                   style: FlutterFlowTheme.of(context).bodyMedium.override(
                         fontFamily: 'Readex Pro',
                         fontSize: 15.0,
-                        fontWeight: FontWeight.w500,
+                        fontWeight: FontWeight.bold,
                       ),
                 ),
               ),
@@ -171,7 +174,7 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                             .override(
                                               fontFamily: 'Readex Pro',
                                               fontSize: 20.0,
-                                              fontWeight: FontWeight.w500,
+                                              fontWeight: FontWeight.bold,
                                             ),
                                       ),
                                     ],
@@ -716,23 +719,37 @@ class _SignUpWidgetState extends State<SignUpWidget> {
                                           return;
                                         }
 
-                                        await UsersRecord.collection
-                                            .doc(user.uid)
+                                        await currentUserReference!
                                             .update(createUsersRecordData(
-                                              phoneNumber: _model
-                                                  .txtTelefonoController.text,
-                                              email: _model
-                                                  .txtCorreoController.text,
-                                              displayName: _model
-                                                  .txtNombreCompletoController
-                                                  .text,
-                                              role: 'user',
-                                              createdTime: getCurrentTimestamp,
-                                              photoUrl: _model.uploadedFileUrl,
-                                            ));
+                                          displayName: _model
+                                              .txtNombreCompletoController.text,
+                                          phoneNumber:
+                                              _model.txtTelefonoController.text,
+                                          role: 'user',
+                                          photoUrl: _model.uploadedFileUrl,
+                                        ));
+                                        await showDialog(
+                                          context: context,
+                                          builder: (alertDialogContext) {
+                                            return AlertDialog(
+                                              title: Text(
+                                                  'Se Registró Exitósamente.'),
+                                              content: Text(
+                                                  'Precioné \"Ok\" para continuar.'),
+                                              actions: [
+                                                TextButton(
+                                                  onPressed: () =>
+                                                      Navigator.pop(
+                                                          alertDialogContext),
+                                                  child: Text('Ok'),
+                                                ),
+                                              ],
+                                            );
+                                          },
+                                        );
 
-                                        context.goNamedAuth(
-                                            'HomePageUser', context.mounted);
+                                        context.pushNamedAuth(
+                                            'Login', context.mounted);
                                       },
                                       text: 'Registrarse',
                                       options: FFButtonOptions(

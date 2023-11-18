@@ -6,7 +6,6 @@ import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
-import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -33,6 +32,8 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
 
     _model.txtBuscarController ??= TextEditingController();
     _model.txtBuscarFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -276,12 +277,20 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
               buttonSize: MediaQuery.sizeOf(context).width * 0.15,
               fillColor: Color(0x00B0E2FF),
               icon: Icon(
-                Icons.menu,
+                Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 40.0,
+                size: 30.0,
               ),
               onPressed: () async {
-                scaffoldKey.currentState!.openDrawer();
+                context.pushNamed(
+                  'HomePageUser',
+                  extra: <String, dynamic>{
+                    kTransitionInfoKey: TransitionInfo(
+                      hasTransition: true,
+                      transitionType: PageTransitionType.fade,
+                    ),
+                  },
+                );
               },
             ),
           ),
@@ -367,7 +376,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                           Align(
                             alignment: AlignmentDirectional(0.00, 0.00),
                             child: Text(
-                              'Citas',
+                              'Tus Citas',
                               style: FlutterFlowTheme.of(context)
                                   .headlineMedium
                                   .override(
@@ -574,6 +583,12 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                   height: 305.0,
                                   decoration: BoxDecoration(
                                     color: FlutterFlowTheme.of(context).primary,
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.network(
+                                        'https://images.unsplash.com/photo-1435527173128-983b87201f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwzfHwlMjBjaXRhfGVufDB8fHx8MTcwMDI1MzEwNnww&ixlib=rb-4.0.3&q=80&w=1080',
+                                      ).image,
+                                    ),
                                     borderRadius: BorderRadius.circular(20.0),
                                   ),
                                   child: Stack(
@@ -620,7 +635,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                         .override(
                                                           fontFamily:
                                                               'Readex Pro',
-                                                          fontSize: 24.0,
+                                                          fontSize: 22.0,
                                                           fontWeight:
                                                               FontWeight.w900,
                                                         ),
@@ -637,7 +652,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                           .override(
                                                             fontFamily:
                                                                 'Readex Pro',
-                                                            fontSize: 24.0,
+                                                            fontSize: 22.0,
                                                             fontWeight:
                                                                 FontWeight.w900,
                                                           ),
@@ -676,7 +691,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
-                                                                fontSize: 15.0,
+                                                                fontSize: 18.0,
                                                               ),
                                                     ),
                                                     Text(
@@ -691,7 +706,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                               .override(
                                                                 fontFamily:
                                                                     'Readex Pro',
-                                                                fontSize: 15.0,
+                                                                fontSize: 18.0,
                                                               ),
                                                     ),
                                                   ],
@@ -715,7 +730,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                             .override(
                                                               fontFamily:
                                                                   'Readex Pro',
-                                                              fontSize: 15.0,
+                                                              fontSize: 18.0,
                                                             ),
                                                       ),
                                                       Text(
@@ -727,7 +742,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                             .override(
                                                               fontFamily:
                                                                   'Readex Pro',
-                                                              fontSize: 15.0,
+                                                              fontSize: 18.0,
                                                             ),
                                                       ),
                                                     ],
@@ -754,7 +769,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                             .override(
                                                               fontFamily:
                                                                   'Readex Pro',
-                                                              fontSize: 15.0,
+                                                              fontSize: 18.0,
                                                             ),
                                                       ),
                                                       Text(
@@ -766,7 +781,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                             .override(
                                                               fontFamily:
                                                                   'Readex Pro',
-                                                              fontSize: 15.0,
+                                                              fontSize: 18.0,
                                                             ),
                                                       ),
                                                     ],
@@ -856,15 +871,51 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                   ),
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          15.0),
+                                                          20.0),
                                                 ),
                                               ),
                                               FFButtonWidget(
                                                 onPressed: () async {
-                                                  await listViewCitasRecord
-                                                      .reference
-                                                      .update(
-                                                          createCitasRecordData());
+                                                  var confirmDialogResponse =
+                                                      await showDialog<bool>(
+                                                            context: context,
+                                                            builder:
+                                                                (alertDialogContext) {
+                                                              return AlertDialog(
+                                                                title: Text(
+                                                                    'Estas seguro que deseas borrar tu cita?'),
+                                                                content: Text(
+                                                                    'Esta acción no se puede Deshacer.'),
+                                                                actions: [
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            alertDialogContext,
+                                                                            false),
+                                                                    child: Text(
+                                                                        'Cancelar'),
+                                                                  ),
+                                                                  TextButton(
+                                                                    onPressed: () =>
+                                                                        Navigator.pop(
+                                                                            alertDialogContext,
+                                                                            true),
+                                                                    child: Text(
+                                                                        'Confirmar'),
+                                                                  ),
+                                                                ],
+                                                              );
+                                                            },
+                                                          ) ??
+                                                          false;
+                                                  if (confirmDialogResponse) {
+                                                    await listViewCitasRecord
+                                                        .reference
+                                                        .delete();
+                                                  } else {
+                                                    context.pushNamed(
+                                                        'AppointmentsUser');
+                                                  }
                                                 },
                                                 text: 'Eliminar',
                                                 options: FFButtonOptions(
@@ -897,7 +948,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                   ),
                                                   borderRadius:
                                                       BorderRadius.circular(
-                                                          15.0),
+                                                          20.0),
                                                 ),
                                               ),
                                             ].divide(SizedBox(width: 20.0)),

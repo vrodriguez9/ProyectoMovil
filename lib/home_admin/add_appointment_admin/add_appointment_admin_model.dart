@@ -1,4 +1,5 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
@@ -6,6 +7,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'add_appointment_admin_widget.dart' show AddAppointmentAdminWidget;
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -17,15 +19,18 @@ class AddAppointmentAdminModel
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
-  DateTime? datePicked1;
-  DateTime? datePicked2;
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
+  // State field(s) for txtNombreUsuario widget.
+  FocusNode? txtNombreUsuarioFocusNode;
+  TextEditingController? txtNombreUsuarioController;
+  String? Function(BuildContext, String?)? txtNombreUsuarioControllerValidator;
+  DateTime? datePicked;
+  // State field(s) for txtDescripcion widget.
+  FocusNode? txtDescripcionFocusNode;
+  TextEditingController? txtDescripcionController;
+  String? Function(BuildContext, String?)? txtDescripcionControllerValidator;
+  // State field(s) for ddEstado widget.
+  String? ddEstadoValue;
+  FormFieldController<String>? ddEstadoValueController;
 
   /// Initialization and disposal methods.
 
@@ -33,8 +38,11 @@ class AddAppointmentAdminModel
 
   void dispose() {
     unfocusNode.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
+    txtNombreUsuarioFocusNode?.dispose();
+    txtNombreUsuarioController?.dispose();
+
+    txtDescripcionFocusNode?.dispose();
+    txtDescripcionController?.dispose();
   }
 
   /// Action blocks are added here.

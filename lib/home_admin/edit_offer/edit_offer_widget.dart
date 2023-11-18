@@ -41,6 +41,8 @@ class _EditOfferWidgetState extends State<EditOfferWidget> {
     _model.txtDescripcionController ??=
         TextEditingController(text: widget.pOferta?.descripcion);
     _model.txtDescripcionFocusNode ??= FocusNode();
+
+    WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
 
   @override
@@ -82,7 +84,7 @@ class _EditOfferWidgetState extends State<EditOfferWidget> {
               icon: Icon(
                 Icons.arrow_back,
                 color: FlutterFlowTheme.of(context).primaryText,
-                size: 24.0,
+                size: 30.0,
               ),
               onPressed: () async {
                 context.pushNamed('HomePageAdmin');
@@ -152,41 +154,38 @@ class _EditOfferWidgetState extends State<EditOfferWidget> {
               mainAxisSize: MainAxisSize.max,
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 1.0,
-                        height: MediaQuery.sizeOf(context).height * 0.04,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).secondaryText,
-                          border: Border.all(
-                            color: Color(0x00B0E2FF),
-                          ),
-                        ),
-                        child: Align(
-                          alignment: AlignmentDirectional(0.00, 0.00),
-                          child: Text(
-                            'Editar Oferta',
-                            style: FlutterFlowTheme.of(context)
-                                .headlineMedium
-                                .override(
-                                  fontFamily: 'Barlow',
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  fontSize: 25.0,
-                                  fontWeight: FontWeight.w900,
-                                  fontStyle: FontStyle.italic,
-                                  useGoogleFonts: false,
-                                ),
-                          ),
+                Row(
+                  mainAxisSize: MainAxisSize.max,
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Container(
+                      width: MediaQuery.sizeOf(context).width * 1.0,
+                      height: MediaQuery.sizeOf(context).height * 0.04,
+                      decoration: BoxDecoration(
+                        color: FlutterFlowTheme.of(context).secondaryText,
+                        border: Border.all(
+                          color: Color(0x00B0E2FF),
                         ),
                       ),
-                    ],
-                  ),
+                      child: Align(
+                        alignment: AlignmentDirectional(0.00, 0.00),
+                        child: Text(
+                          'Editar Oferta',
+                          style: FlutterFlowTheme.of(context)
+                              .headlineMedium
+                              .override(
+                                fontFamily: 'Barlow',
+                                color: FlutterFlowTheme.of(context).primary,
+                                fontSize: 25.0,
+                                fontWeight: FontWeight.bold,
+                                fontStyle: FontStyle.italic,
+                                useGoogleFonts: false,
+                              ),
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
                 Padding(
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
@@ -375,7 +374,7 @@ class _EditOfferWidgetState extends State<EditOfferWidget> {
                                               borderSide: BorderSide(
                                                 color:
                                                     FlutterFlowTheme.of(context)
-                                                        .primaryText,
+                                                        .primaryBackground,
                                                 width: 2.0,
                                               ),
                                               borderRadius:
@@ -417,6 +416,9 @@ class _EditOfferWidgetState extends State<EditOfferWidget> {
                                               .bodyMedium
                                               .override(
                                                 fontFamily: 'Readex Pro',
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .primaryText,
                                                 fontSize: 15.0,
                                               ),
                                           textAlign: TextAlign.start,

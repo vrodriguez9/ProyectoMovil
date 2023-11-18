@@ -14,10 +14,10 @@ class HomePageAdminModel extends FlutterFlowModel<HomePageAdminWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
+  // State field(s) for txtBuscar widget.
+  FocusNode? txtBuscarFocusNode;
+  TextEditingController? txtBuscarController;
+  String? Function(BuildContext, String?)? txtBuscarControllerValidator;
 
   /// Initialization and disposal methods.
 
@@ -25,8 +25,8 @@ class HomePageAdminModel extends FlutterFlowModel<HomePageAdminWidget> {
 
   void dispose() {
     unfocusNode.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
+    txtBuscarFocusNode?.dispose();
+    txtBuscarController?.dispose();
   }
 
   /// Action blocks are added here.

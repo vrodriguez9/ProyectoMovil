@@ -382,7 +382,7 @@ class _CotizacionUserWidgetState extends State<CotizacionUserWidget> {
                                       color:
                                           FlutterFlowTheme.of(context).primary,
                                       fontSize: 25.0,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                       useGoogleFonts: false,
                                     ),
@@ -496,7 +496,7 @@ class _CotizacionUserWidgetState extends State<CotizacionUserWidget> {
                                                 .override(
                                                   fontFamily: 'Readex Pro',
                                                   fontSize: 24.0,
-                                                  fontWeight: FontWeight.w900,
+                                                  fontWeight: FontWeight.bold,
                                                 ),
                                           ),
                                         ],

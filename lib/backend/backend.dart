@@ -9,6 +9,7 @@ import 'schema/users_record.dart';
 import 'schema/catalogos_record.dart';
 import 'schema/citas_record.dart';
 import 'schema/evaluaciones_record.dart';
+import 'schema/cotizaciones_record.dart';
 
 export 'dart:async' show StreamSubscription;
 export 'package:cloud_firestore/cloud_firestore.dart';
@@ -20,6 +21,7 @@ export 'schema/users_record.dart';
 export 'schema/catalogos_record.dart';
 export 'schema/citas_record.dart';
 export 'schema/evaluaciones_record.dart';
+export 'schema/cotizaciones_record.dart';
 
 /// Functions to query UsersRecords (as a Stream and as a Future).
 Future<int> queryUsersRecordCount({
@@ -164,6 +166,43 @@ Future<List<EvaluacionesRecord>> queryEvaluacionesRecordOnce({
     queryCollectionOnce(
       EvaluacionesRecord.collection,
       EvaluacionesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+/// Functions to query CotizacionesRecords (as a Stream and as a Future).
+Future<int> queryCotizacionesRecordCount({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+}) =>
+    queryCollectionCount(
+      CotizacionesRecord.collection,
+      queryBuilder: queryBuilder,
+      limit: limit,
+    );
+
+Stream<List<CotizacionesRecord>> queryCotizacionesRecord({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollection(
+      CotizacionesRecord.collection,
+      CotizacionesRecord.fromSnapshot,
+      queryBuilder: queryBuilder,
+      limit: limit,
+      singleRecord: singleRecord,
+    );
+
+Future<List<CotizacionesRecord>> queryCotizacionesRecordOnce({
+  Query Function(Query)? queryBuilder,
+  int limit = -1,
+  bool singleRecord = false,
+}) =>
+    queryCollectionOnce(
+      CotizacionesRecord.collection,
+      CotizacionesRecord.fromSnapshot,
       queryBuilder: queryBuilder,
       limit: limit,
       singleRecord: singleRecord,

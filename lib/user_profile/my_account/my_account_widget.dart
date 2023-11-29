@@ -321,21 +321,22 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                       width: MediaQuery.sizeOf(context).width * 1.0,
                       height: MediaQuery.sizeOf(context).height * 0.04,
                       decoration: BoxDecoration(
-                        color: FlutterFlowTheme.of(context).tertiary,
+                        color: FlutterFlowTheme.of(context).secondaryText,
                       ),
                       child: Align(
                         alignment: AlignmentDirectional(0.00, 0.00),
                         child: Stack(
                           children: [
                             Align(
-                              alignment: AlignmentDirectional(0.15, 0.10),
+                              alignment: AlignmentDirectional(0.00, 0.00),
                               child: Text(
                                 'Tu Cuenta',
+                                textAlign: TextAlign.start,
                                 style: FlutterFlowTheme.of(context)
                                     .headlineMedium
                                     .override(
                                       fontFamily: 'Barlow',
-                                      color: Colors.black,
+                                      color: Colors.white,
                                       fontSize: 25.0,
                                       fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
@@ -407,10 +408,6 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                                 }
                                 List<UsersRecord> columnUsersRecordList =
                                     snapshot.data!;
-                                // Return an empty Container when the item does not exist.
-                                if (snapshot.data!.isEmpty) {
-                                  return Container();
-                                }
                                 final columnUsersRecord =
                                     columnUsersRecordList.isNotEmpty
                                         ? columnUsersRecordList.first

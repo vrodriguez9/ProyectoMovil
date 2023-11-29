@@ -163,7 +163,13 @@ GoRouter createRouter(AppStateNotifier appStateNotifier) => GoRouter(
         FFRoute(
           name: 'EditQuote',
           path: '/editQuote',
-          builder: (context, params) => EditQuoteWidget(),
+          asyncParams: {
+            'pCotizacion':
+                getDoc(['cotizaciones'], CotizacionesRecord.fromSnapshot),
+          },
+          builder: (context, params) => EditQuoteWidget(
+            pCotizacion: params.getParam('pCotizacion', ParamType.Document),
+          ),
         ),
         FFRoute(
           name: 'AppointmentsUser',

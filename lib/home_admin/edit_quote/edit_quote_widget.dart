@@ -1,10 +1,12 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/backend/backend.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -13,7 +15,12 @@ import 'edit_quote_model.dart';
 export 'edit_quote_model.dart';
 
 class EditQuoteWidget extends StatefulWidget {
-  const EditQuoteWidget({Key? key}) : super(key: key);
+  const EditQuoteWidget({
+    Key? key,
+    this.pCotizacion,
+  }) : super(key: key);
+
+  final CotizacionesRecord? pCotizacion;
 
   @override
   _EditQuoteWidgetState createState() => _EditQuoteWidgetState();
@@ -158,7 +165,7 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                       child: Align(
                         alignment: AlignmentDirectional(0.00, 0.00),
                         child: Text(
-                          'Editar Cita',
+                          'Editar Cotización',
                           style: FlutterFlowTheme.of(context)
                               .headlineMedium
                               .override(
@@ -175,133 +182,64 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                   ],
                 ),
                 Padding(
-                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 0.0),
-                  child: Row(
-                    mainAxisSize: MainAxisSize.max,
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Container(
-                        width: MediaQuery.sizeOf(context).width * 1.0,
-                        height: 380.0,
-                        decoration: BoxDecoration(
-                          color: FlutterFlowTheme.of(context).primary,
-                          borderRadius: BorderRadius.circular(20.0),
-                        ),
-                        child: Stack(
+                  padding: EdgeInsetsDirectional.fromSTEB(0.0, 30.0, 0.0, 15.0),
+                  child: Container(
+                    width: MediaQuery.sizeOf(context).width * 1.0,
+                    height: 400.0,
+                    decoration: BoxDecoration(
+                      color: FlutterFlowTheme.of(context).primary,
+                      borderRadius: BorderRadius.circular(20.0),
+                    ),
+                    child: Stack(
+                      children: [
+                        Row(
+                          mainAxisSize: MainAxisSize.max,
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
-                            Row(
-                              mainAxisSize: MainAxisSize.max,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Container(
-                                    width: 100.0,
-                                    height: MediaQuery.sizeOf(context).height *
-                                        0.05,
-                                    decoration: BoxDecoration(
-                                      color:
-                                          FlutterFlowTheme.of(context).tertiary,
-                                      borderRadius: BorderRadius.only(
-                                        bottomLeft: Radius.circular(0.0),
-                                        bottomRight: Radius.circular(0.0),
-                                        topLeft: Radius.circular(20.0),
-                                        topRight: Radius.circular(20.0),
-                                      ),
-                                    ),
-                                    child: Align(
-                                      alignment:
-                                          AlignmentDirectional(0.00, 0.00),
-                                      child: Text(
-                                        'Cotizacion #25',
-                                        textAlign: TextAlign.center,
-                                        style: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                      ),
-                                    ),
+                            Expanded(
+                              child: Container(
+                                width: 100.0,
+                                height:
+                                    MediaQuery.sizeOf(context).height * 0.05,
+                                decoration: BoxDecoration(
+                                  color: FlutterFlowTheme.of(context).tertiary,
+                                  borderRadius: BorderRadius.only(
+                                    bottomLeft: Radius.circular(0.0),
+                                    bottomRight: Radius.circular(0.0),
+                                    topLeft: Radius.circular(20.0),
+                                    topRight: Radius.circular(20.0),
                                   ),
                                 ),
-                              ],
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 60.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Cliente: XYZ',
-                                    textAlign: TextAlign.center,
-                                    style: FlutterFlowTheme.of(context)
-                                        .bodyMedium
-                                        .override(
-                                          fontFamily: 'Readex Pro',
-                                          fontSize: 24.0,
-                                          fontWeight: FontWeight.w900,
-                                        ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 120.0, 0.0, 0.0),
-                              child: Row(
-                                mainAxisSize: MainAxisSize.max,
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                children: [
-                                  Text(
-                                    'Producto: ABC\n\nCantidad: 10\n\nMensaje: Lorem ipsun.',
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                  ),
-                                ],
-                              ),
-                            ),
-                            Align(
-                              alignment: AlignmentDirectional(0.00, 1.00),
-                              child: Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    0.0, 0.0, 0.0, 80.0),
+                                alignment: AlignmentDirectional(0.00, 0.00),
                                 child: Row(
                                   mainAxisSize: MainAxisSize.max,
                                   mainAxisAlignment: MainAxisAlignment.center,
                                   children: [
-                                    FlutterFlowDropDown<String>(
-                                      controller:
-                                          _model.dropDownValueController ??=
-                                              FormFieldController<String>(null),
-                                      options: [
-                                        'Confirmada',
-                                        'Cancelada',
-                                        'Pendiente'
-                                      ],
-                                      onChanged: (val) => setState(
-                                          () => _model.dropDownValue = val),
-                                      width: 300.0,
-                                      height: 50.0,
-                                      textStyle: FlutterFlowTheme.of(context)
-                                          .bodyMedium,
-                                      hintText: 'Selecciona el Estado',
-                                      icon: Icon(
-                                        Icons.keyboard_arrow_down_rounded,
-                                        color: FlutterFlowTheme.of(context)
-                                            .secondaryText,
-                                        size: 24.0,
+                                    Text(
+                                      'Cliente: ',
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            fontSize: 24.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                    ),
+                                    Text(
+                                      valueOrDefault<String>(
+                                        widget.pCotizacion?.nombreCliente,
+                                        'Sin nombre.',
                                       ),
-                                      fillColor: FlutterFlowTheme.of(context)
-                                          .secondaryBackground,
-                                      elevation: 2.0,
-                                      borderColor: FlutterFlowTheme.of(context)
-                                          .primaryBackground,
-                                      borderWidth: 2.0,
-                                      borderRadius: 8.0,
-                                      margin: EdgeInsetsDirectional.fromSTEB(
-                                          16.0, 4.0, 16.0, 4.0),
-                                      hidesUnderline: true,
-                                      isSearchable: false,
-                                      isMultiSelect: false,
+                                      textAlign: TextAlign.center,
+                                      style: FlutterFlowTheme.of(context)
+                                          .bodyMedium
+                                          .override(
+                                            fontFamily: 'Readex Pro',
+                                            fontSize: 24.0,
+                                            fontWeight: FontWeight.bold,
+                                          ),
                                     ),
                                   ],
                                 ),
@@ -309,8 +247,100 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        Padding(
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 52.0, 0.0, 0.0),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.max,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              Column(
+                                mainAxisSize: MainAxisSize.max,
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceAround,
+                                children: [
+                                  Text(
+                                    valueOrDefault<String>(
+                                      widget.pCotizacion?.nombreProducto,
+                                      'Sin producto a solicitar.',
+                                    ),
+                                    textAlign: TextAlign.center,
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                  Text(
+                                    valueOrDefault<String>(
+                                      widget.pCotizacion?.cantidad?.toString(),
+                                      '0',
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    children: [
+                                      Text(
+                                        'Estado: ',
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Text(
+                                        valueOrDefault<String>(
+                                          widget.pCotizacion?.estado,
+                                          'Define un estado.',
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              fontWeight: FontWeight.bold,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  FlutterFlowDropDown<String>(
+                                    controller:
+                                        _model.ddEstadoValueController ??=
+                                            FormFieldController<String>(null),
+                                    options: [
+                                      'Confirmada',
+                                      'Cancelada',
+                                      'Pendiente'
+                                    ],
+                                    onChanged: (val) => setState(
+                                        () => _model.ddEstadoValue = val),
+                                    width: 300.0,
+                                    height: 50.0,
+                                    textStyle:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    hintText: 'Selecciona el Estado',
+                                    icon: Icon(
+                                      Icons.keyboard_arrow_down_rounded,
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondaryText,
+                                      size: 24.0,
+                                    ),
+                                    fillColor: FlutterFlowTheme.of(context)
+                                        .secondaryBackground,
+                                    elevation: 2.0,
+                                    borderColor: FlutterFlowTheme.of(context)
+                                        .primaryBackground,
+                                    borderWidth: 2.0,
+                                    borderRadius: 8.0,
+                                    margin: EdgeInsetsDirectional.fromSTEB(
+                                        16.0, 4.0, 16.0, 4.0),
+                                    hidesUnderline: true,
+                                    isSearchable: false,
+                                    isMultiSelect: false,
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
                 Padding(
@@ -320,8 +350,11 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                     mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     children: [
                       FFButtonWidget(
-                        onPressed: () {
-                          print('Button pressed ...');
+                        onPressed: () async {
+                          await widget.pCotizacion!.reference
+                              .update(createCotizacionesRecordData(
+                            estado: _model.ddEstadoValue,
+                          ));
                         },
                         text: 'Actualizar',
                         options: FFButtonOptions(

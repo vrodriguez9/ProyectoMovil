@@ -383,7 +383,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                     fontFamily: 'Barlow',
                                     color: FlutterFlowTheme.of(context).primary,
                                     fontSize: 25.0,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
                                     useGoogleFonts: false,
                                   ),
@@ -637,7 +637,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                               'Readex Pro',
                                                           fontSize: 22.0,
                                                           fontWeight:
-                                                              FontWeight.w900,
+                                                              FontWeight.bold,
                                                         ),
                                                   ),
                                                   Flexible(
@@ -654,7 +654,7 @@ class _AppointmentsUserWidgetState extends State<AppointmentsUserWidget> {
                                                                 'Readex Pro',
                                                             fontSize: 22.0,
                                                             fontWeight:
-                                                                FontWeight.w900,
+                                                                FontWeight.bold,
                                                           ),
                                                     ),
                                                   ),

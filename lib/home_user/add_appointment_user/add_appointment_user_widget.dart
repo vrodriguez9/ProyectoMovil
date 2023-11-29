@@ -185,7 +185,7 @@ class _AddAppointmentUserWidgetState extends State<AddAppointmentUserWidget> {
                                 fontFamily: 'Barlow',
                                 color: FlutterFlowTheme.of(context).primary,
                                 fontSize: 25.0,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,
                                 useGoogleFonts: false,
                               ),

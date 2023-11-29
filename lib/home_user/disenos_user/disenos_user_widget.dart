@@ -180,7 +180,7 @@ class _DisenosUserWidgetState extends State<DisenosUserWidget> {
                                       color:
                                           FlutterFlowTheme.of(context).primary,
                                       fontSize: 30.0,
-                                      fontWeight: FontWeight.w900,
+                                      fontWeight: FontWeight.bold,
                                       fontStyle: FontStyle.italic,
                                       useGoogleFonts: false,
                                     ),

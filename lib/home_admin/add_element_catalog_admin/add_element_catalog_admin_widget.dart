@@ -175,9 +175,9 @@ class _AddElementCatalogAdminWidgetState
                               .headlineMedium
                               .override(
                                 fontFamily: 'Barlow',
-                                color: Colors.black,
+                                color: FlutterFlowTheme.of(context).primary,
                                 fontSize: 25.0,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,
                                 useGoogleFonts: false,
                               ),

@@ -481,10 +481,9 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                                       .headlineMedium
                                       .override(
                                         fontFamily: 'Barlow',
-                                        color: FlutterFlowTheme.of(context)
-                                            .primaryText,
+                                        color: Colors.white,
                                         fontSize: 25.0,
-                                        fontWeight: FontWeight.w900,
+                                        fontWeight: FontWeight.bold,
                                         fontStyle: FontStyle.italic,
                                         useGoogleFonts: false,
                                       ),
@@ -753,7 +752,7 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                                           fontFamily: 'Barlow',
                                           color: Colors.white,
                                           fontSize: 30.0,
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic,
                                           useGoogleFonts: false,
                                         ),
@@ -1025,7 +1024,7 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                                           color: FlutterFlowTheme.of(context)
                                               .primary,
                                           fontSize: 30.0,
-                                          fontWeight: FontWeight.w900,
+                                          fontWeight: FontWeight.bold,
                                           fontStyle: FontStyle.italic,
                                           useGoogleFonts: false,
                                         ),

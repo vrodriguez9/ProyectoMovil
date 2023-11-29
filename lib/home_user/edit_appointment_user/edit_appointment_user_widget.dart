@@ -253,7 +253,7 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                                     fontFamily: 'Barlow',
                                     color: FlutterFlowTheme.of(context).primary,
                                     fontSize: 25.0,
-                                    fontWeight: FontWeight.w900,
+                                    fontWeight: FontWeight.bold,
                                     fontStyle: FontStyle.italic,
                                     useGoogleFonts: false,
                                   ),

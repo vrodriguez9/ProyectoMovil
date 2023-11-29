@@ -173,9 +173,9 @@ class _AddAppointmentAdminWidgetState extends State<AddAppointmentAdminWidget> {
                               .headlineMedium
                               .override(
                                 fontFamily: 'Barlow',
-                                color: Colors.black,
+                                color: Colors.white,
                                 fontSize: 25.0,
-                                fontWeight: FontWeight.w900,
+                                fontWeight: FontWeight.bold,
                                 fontStyle: FontStyle.italic,
                                 useGoogleFonts: false,
                               ),

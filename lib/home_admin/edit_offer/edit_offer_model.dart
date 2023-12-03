@@ -15,18 +15,38 @@ class EditOfferModel extends FlutterFlowModel<EditOfferWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   // State field(s) for txtTitulo widget.
   FocusNode? txtTituloFocusNode;
   TextEditingController? txtTituloController;
   String? Function(BuildContext, String?)? txtTituloControllerValidator;
+  String? _txtTituloControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    return null;
+  }
+
   // State field(s) for txtDescripcion widget.
   FocusNode? txtDescripcionFocusNode;
   TextEditingController? txtDescripcionController;
   String? Function(BuildContext, String?)? txtDescripcionControllerValidator;
+  String? _txtDescripcionControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    return null;
+  }
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    txtTituloControllerValidator = _txtTituloControllerValidator;
+    txtDescripcionControllerValidator = _txtDescripcionControllerValidator;
+  }
 
   void dispose() {
     unfocusNode.dispose();

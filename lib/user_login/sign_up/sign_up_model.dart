@@ -17,6 +17,7 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   bool isDataUploading = false;
   FFUploadedFile uploadedLocalFile =
       FFUploadedFile(bytes: Uint8List.fromList([]));
@@ -26,31 +27,94 @@ class SignUpModel extends FlutterFlowModel<SignUpWidget> {
   FocusNode? txtNombreCompletoFocusNode;
   TextEditingController? txtNombreCompletoController;
   String? Function(BuildContext, String?)? txtNombreCompletoControllerValidator;
+  String? _txtNombreCompletoControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    if (val.length < 3) {
+      return 'Nombre inválido.';
+    }
+
+    return null;
+  }
+
   // State field(s) for txtCorreo widget.
   FocusNode? txtCorreoFocusNode;
   TextEditingController? txtCorreoController;
   String? Function(BuildContext, String?)? txtCorreoControllerValidator;
+  String? _txtCorreoControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    if (!RegExp(kTextValidatorEmailRegex).hasMatch(val)) {
+      return 'El correo debe contener @, .com...';
+    }
+    return null;
+  }
+
   // State field(s) for txtTelefono widget.
   FocusNode? txtTelefonoFocusNode;
   TextEditingController? txtTelefonoController;
   String? Function(BuildContext, String?)? txtTelefonoControllerValidator;
+  String? _txtTelefonoControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    if (val.length < 8) {
+      return 'Número no válido.';
+    }
+    if (val.length > 8) {
+      return 'Maximum 8 characters allowed, currently ${val.length}.';
+    }
+
+    return null;
+  }
+
   // State field(s) for txtContrasenia widget.
   FocusNode? txtContraseniaFocusNode;
   TextEditingController? txtContraseniaController;
   late bool txtContraseniaVisibility;
   String? Function(BuildContext, String?)? txtContraseniaControllerValidator;
+  String? _txtContraseniaControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    return null;
+  }
+
   // State field(s) for txtRepetirContrasenia widget.
   FocusNode? txtRepetirContraseniaFocusNode;
   TextEditingController? txtRepetirContraseniaController;
   late bool txtRepetirContraseniaVisibility;
   String? Function(BuildContext, String?)?
       txtRepetirContraseniaControllerValidator;
+  String? _txtRepetirContraseniaControllerValidator(
+      BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Repita la contraseña.';
+    }
+
+    return null;
+  }
 
   /// Initialization and disposal methods.
 
   void initState(BuildContext context) {
+    txtNombreCompletoControllerValidator =
+        _txtNombreCompletoControllerValidator;
+    txtCorreoControllerValidator = _txtCorreoControllerValidator;
+    txtTelefonoControllerValidator = _txtTelefonoControllerValidator;
     txtContraseniaVisibility = false;
+    txtContraseniaControllerValidator = _txtContraseniaControllerValidator;
     txtRepetirContraseniaVisibility = false;
+    txtRepetirContraseniaControllerValidator =
+        _txtRepetirContraseniaControllerValidator;
   }
 
   void dispose() {

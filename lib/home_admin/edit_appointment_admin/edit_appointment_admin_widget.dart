@@ -387,7 +387,7 @@ class _EditAppointmentAdminWidgetState
                                   children: [
                                     FlutterFlowDropDown<String>(
                                       controller:
-                                          _model.dropDownValueController ??=
+                                          _model.ddEstadoValueController ??=
                                               FormFieldController<String>(null),
                                       options: [
                                         'Confirmada',
@@ -395,7 +395,7 @@ class _EditAppointmentAdminWidgetState
                                         'Pendiente'
                                       ],
                                       onChanged: (val) => setState(
-                                          () => _model.dropDownValue = val),
+                                          () => _model.ddEstadoValue = val),
                                       width: 300.0,
                                       height: 50.0,
                                       textStyle: FlutterFlowTheme.of(context)
@@ -439,7 +439,24 @@ class _EditAppointmentAdminWidgetState
                       FFButtonWidget(
                         onPressed: () async {
                           await widget.pCita!.reference
-                              .update(createCitasRecordData());
+                              .update(createCitasRecordData(
+                            estado: _model.ddEstadoValue,
+                          ));
+                          await showDialog(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                content: Text('Cita actualizada exitosamente'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext),
+                                    child: Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         text: 'Actualizar',
                         options: FFButtonOptions(

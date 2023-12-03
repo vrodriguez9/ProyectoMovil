@@ -1,12 +1,15 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'dart:async';
 import 'quotes_widget.dart' show QuotesWidget;
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -16,10 +19,13 @@ class QuotesModel extends FlutterFlowModel<QuotesWidget> {
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for TextField widget.
-  FocusNode? textFieldFocusNode;
-  TextEditingController? textController;
-  String? Function(BuildContext, String?)? textControllerValidator;
+  // State field(s) for txtBuscar widget.
+  final txtBuscarKey = GlobalKey();
+  FocusNode? txtBuscarFocusNode;
+  TextEditingController? txtBuscarController;
+  String? txtBuscarSelectedOption;
+  String? Function(BuildContext, String?)? txtBuscarControllerValidator;
+  Completer<List<CotizacionesRecord>>? firestoreRequestCompleter;
   // State field(s) for ddFiltrar widget.
   String? ddFiltrarValue;
   FormFieldController<String>? ddFiltrarValueController;
@@ -30,11 +36,25 @@ class QuotesModel extends FlutterFlowModel<QuotesWidget> {
 
   void dispose() {
     unfocusNode.dispose();
-    textFieldFocusNode?.dispose();
-    textController?.dispose();
+    txtBuscarFocusNode?.dispose();
   }
 
   /// Action blocks are added here.
 
   /// Additional helper methods are added here.
+
+  Future waitForFirestoreRequestCompleted({
+    double minWait = 0,
+    double maxWait = double.infinity,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    while (true) {
+      await Future.delayed(Duration(milliseconds: 50));
+      final timeElapsed = stopwatch.elapsedMilliseconds;
+      final requestComplete = firestoreRequestCompleter?.isCompleted ?? false;
+      if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
+        break;
+      }
+    }
+  }
 }

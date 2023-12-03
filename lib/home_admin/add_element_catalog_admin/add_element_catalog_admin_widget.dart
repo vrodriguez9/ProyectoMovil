@@ -203,476 +203,499 @@ class _AddElementCatalogAdminWidgetState
                           child: Column(
                             mainAxisSize: MainAxisSize.max,
                             children: [
-                              Padding(
-                                padding: EdgeInsetsDirectional.fromSTEB(
-                                    10.0, 0.0, 10.0, 0.0),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            width: 200.0,
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height *
-                                                0.09,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(0.0),
-                                                bottomRight:
-                                                    Radius.circular(0.0),
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
+                              Form(
+                                key: _model.formKey,
+                                autovalidateMode: AutovalidateMode.always,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      10.0, 0.0, 10.0, 0.0),
+                                  child: Stack(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              width: 200.0,
+                                              height: MediaQuery.sizeOf(context)
+                                                      .height *
+                                                  0.09,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(0.0),
+                                                  bottomRight:
+                                                      Radius.circular(0.0),
+                                                  topLeft:
+                                                      Radius.circular(20.0),
+                                                  topRight:
+                                                      Radius.circular(20.0),
+                                                ),
+                                              ),
+                                              child: Stack(
+                                                children: [
+                                                  Align(
+                                                    alignment:
+                                                        AlignmentDirectional(
+                                                            0.00, 0.00),
+                                                    child: FlutterFlowDropDown<
+                                                        String>(
+                                                      controller: _model
+                                                              .ddCategoriaValueController ??=
+                                                          FormFieldController<
+                                                              String>(null),
+                                                      options: [
+                                                        'Diseño',
+                                                        'Ofertas',
+                                                        'Rotulacion',
+                                                        'Construccion'
+                                                      ],
+                                                      onChanged: (val) =>
+                                                          setState(() => _model
+                                                                  .ddCategoriaValue =
+                                                              val),
+                                                      width: 300.0,
+                                                      height: 50.0,
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                      hintText:
+                                                          'Selecciona una Categoria',
+                                                      icon: Icon(
+                                                        Icons
+                                                            .keyboard_arrow_down_rounded,
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .secondaryText,
+                                                        size: 24.0,
+                                                      ),
+                                                      fillColor: FlutterFlowTheme
+                                                              .of(context)
+                                                          .secondaryBackground,
+                                                      elevation: 2.0,
+                                                      borderColor:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .secondaryBackground,
+                                                      borderWidth: 2.0,
+                                                      borderRadius: 8.0,
+                                                      margin:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  16.0,
+                                                                  4.0,
+                                                                  16.0,
+                                                                  4.0),
+                                                      hidesUnderline: true,
+                                                      isSearchable: false,
+                                                      isMultiSelect: false,
+                                                    ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
-                                            child: Stack(
+                                          ),
+                                        ],
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 102.0, 0.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          crossAxisAlignment:
+                                              CrossAxisAlignment.center,
+                                          children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.max,
                                               children: [
-                                                Align(
-                                                  alignment:
-                                                      AlignmentDirectional(
-                                                          0.00, 0.00),
-                                                  child: FlutterFlowDropDown<
-                                                      String>(
-                                                    controller: _model
-                                                            .ddCategoriaValueController ??=
-                                                        FormFieldController<
-                                                            String>(null),
-                                                    options: [
-                                                      'Diseño',
-                                                      'Ofertas',
-                                                      'Rotulacion',
-                                                      'Construccion'
-                                                    ],
-                                                    onChanged: (val) =>
+                                                Padding(
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          0.0, 0.0, 0.0, 5.0),
+                                                  child: FFButtonWidget(
+                                                    onPressed: () async {
+                                                      // CargarImagen
+                                                      final selectedMedia =
+                                                          await selectMediaWithSourceBottomSheet(
+                                                        context: context,
+                                                        allowPhoto: true,
+                                                      );
+                                                      if (selectedMedia !=
+                                                              null &&
+                                                          selectedMedia.every((m) =>
+                                                              validateFileFormat(
+                                                                  m.storagePath,
+                                                                  context))) {
                                                         setState(() => _model
-                                                                .ddCategoriaValue =
-                                                            val),
-                                                    width: 300.0,
-                                                    height: 50.0,
-                                                    textStyle:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .bodyMedium,
-                                                    hintText:
-                                                        'Selecciona una Categoria',
+                                                                .isDataUploading =
+                                                            true);
+                                                        var selectedUploadedFiles =
+                                                            <FFUploadedFile>[];
+
+                                                        var downloadUrls =
+                                                            <String>[];
+                                                        try {
+                                                          selectedUploadedFiles =
+                                                              selectedMedia
+                                                                  .map((m) =>
+                                                                      FFUploadedFile(
+                                                                        name: m
+                                                                            .storagePath
+                                                                            .split('/')
+                                                                            .last,
+                                                                        bytes: m
+                                                                            .bytes,
+                                                                        height: m
+                                                                            .dimensions
+                                                                            ?.height,
+                                                                        width: m
+                                                                            .dimensions
+                                                                            ?.width,
+                                                                        blurHash:
+                                                                            m.blurHash,
+                                                                      ))
+                                                                  .toList();
+
+                                                          downloadUrls =
+                                                              (await Future
+                                                                      .wait(
+                                                            selectedMedia.map(
+                                                              (m) async =>
+                                                                  await uploadData(
+                                                                      m.storagePath,
+                                                                      m.bytes),
+                                                            ),
+                                                          ))
+                                                                  .where((u) =>
+                                                                      u != null)
+                                                                  .map(
+                                                                      (u) => u!)
+                                                                  .toList();
+                                                        } finally {
+                                                          _model.isDataUploading =
+                                                              false;
+                                                        }
+                                                        if (selectedUploadedFiles
+                                                                    .length ==
+                                                                selectedMedia
+                                                                    .length &&
+                                                            downloadUrls
+                                                                    .length ==
+                                                                selectedMedia
+                                                                    .length) {
+                                                          setState(() {
+                                                            _model.uploadedLocalFile =
+                                                                selectedUploadedFiles
+                                                                    .first;
+                                                            _model.uploadedFileUrl =
+                                                                downloadUrls
+                                                                    .first;
+                                                          });
+                                                        } else {
+                                                          setState(() {});
+                                                          return;
+                                                        }
+                                                      }
+                                                    },
+                                                    text: 'Foto',
                                                     icon: Icon(
-                                                      Icons
-                                                          .keyboard_arrow_down_rounded,
+                                                      Icons.add_circle_outline,
+                                                      size: 15.0,
+                                                    ),
+                                                    options: FFButtonOptions(
+                                                      height: 40.0,
+                                                      padding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  24.0,
+                                                                  0.0,
+                                                                  24.0,
+                                                                  0.0),
+                                                      iconPadding:
+                                                          EdgeInsetsDirectional
+                                                              .fromSTEB(
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0,
+                                                                  0.0),
                                                       color:
                                                           FlutterFlowTheme.of(
                                                                   context)
-                                                              .secondaryText,
-                                                      size: 24.0,
+                                                              .tertiary,
+                                                      textStyle:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .titleSmall
+                                                              .override(
+                                                                fontFamily:
+                                                                    'Readex Pro',
+                                                                color: Colors
+                                                                    .white,
+                                                              ),
+                                                      elevation: 3.0,
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            Colors.transparent,
+                                                        width: 1.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              8.0),
                                                     ),
-                                                    fillColor: FlutterFlowTheme
-                                                            .of(context)
-                                                        .secondaryBackground,
-                                                    elevation: 2.0,
-                                                    borderColor:
-                                                        FlutterFlowTheme.of(
-                                                                context)
-                                                            .secondaryBackground,
-                                                    borderWidth: 2.0,
-                                                    borderRadius: 8.0,
-                                                    margin:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(16.0, 4.0,
-                                                                16.0, 4.0),
-                                                    hidesUnderline: true,
-                                                    isSearchable: false,
-                                                    isMultiSelect: false,
+                                                  ),
+                                                ),
+                                                ClipRRect(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                  child: Image.network(
+                                                    _model.uploadedFileUrl,
+                                                    width: 300.0,
+                                                    height: 200.0,
+                                                    fit: BoxFit.cover,
                                                   ),
                                                 ),
                                               ],
                                             ),
-                                          ),
+                                          ],
                                         ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 102.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        crossAxisAlignment:
-                                            CrossAxisAlignment.center,
-                                        children: [
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            children: [
-                                              Padding(
+                                      ),
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 368.0, 0.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
                                                 padding: EdgeInsetsDirectional
                                                     .fromSTEB(
-                                                        0.0, 0.0, 0.0, 5.0),
-                                                child: FFButtonWidget(
-                                                  onPressed: () async {
-                                                    // CargarImagen
-                                                    final selectedMedia =
-                                                        await selectMediaWithSourceBottomSheet(
-                                                      context: context,
-                                                      allowPhoto: true,
-                                                    );
-                                                    if (selectedMedia != null &&
-                                                        selectedMedia.every((m) =>
-                                                            validateFileFormat(
-                                                                m.storagePath,
-                                                                context))) {
-                                                      setState(() => _model
-                                                              .isDataUploading =
-                                                          true);
-                                                      var selectedUploadedFiles =
-                                                          <FFUploadedFile>[];
-
-                                                      var downloadUrls =
-                                                          <String>[];
-                                                      try {
-                                                        selectedUploadedFiles =
-                                                            selectedMedia
-                                                                .map((m) =>
-                                                                    FFUploadedFile(
-                                                                      name: m
-                                                                          .storagePath
-                                                                          .split(
-                                                                              '/')
-                                                                          .last,
-                                                                      bytes: m
-                                                                          .bytes,
-                                                                      height: m
-                                                                          .dimensions
-                                                                          ?.height,
-                                                                      width: m
-                                                                          .dimensions
-                                                                          ?.width,
-                                                                      blurHash:
-                                                                          m.blurHash,
-                                                                    ))
-                                                                .toList();
-
-                                                        downloadUrls =
-                                                            (await Future.wait(
-                                                          selectedMedia.map(
-                                                            (m) async =>
-                                                                await uploadData(
-                                                                    m.storagePath,
-                                                                    m.bytes),
-                                                          ),
-                                                        ))
-                                                                .where((u) =>
-                                                                    u != null)
-                                                                .map((u) => u!)
-                                                                .toList();
-                                                      } finally {
-                                                        _model.isDataUploading =
-                                                            false;
-                                                      }
-                                                      if (selectedUploadedFiles
-                                                                  .length ==
-                                                              selectedMedia
-                                                                  .length &&
-                                                          downloadUrls.length ==
-                                                              selectedMedia
-                                                                  .length) {
-                                                        setState(() {
-                                                          _model.uploadedLocalFile =
-                                                              selectedUploadedFiles
-                                                                  .first;
-                                                          _model.uploadedFileUrl =
-                                                              downloadUrls
-                                                                  .first;
-                                                        });
-                                                      } else {
-                                                        setState(() {});
-                                                        return;
-                                                      }
-                                                    }
-                                                  },
-                                                  text: 'Foto',
-                                                  icon: Icon(
-                                                    Icons.add_circle_outline,
-                                                    size: 15.0,
-                                                  ),
-                                                  options: FFButtonOptions(
-                                                    height: 40.0,
-                                                    padding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(24.0, 0.0,
-                                                                24.0, 0.0),
-                                                    iconPadding:
-                                                        EdgeInsetsDirectional
-                                                            .fromSTEB(0.0, 0.0,
-                                                                0.0, 0.0),
-                                                    color: FlutterFlowTheme.of(
-                                                            context)
-                                                        .tertiary,
-                                                    textStyle: FlutterFlowTheme
-                                                            .of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                        ),
-                                                    elevation: 3.0,
-                                                    borderSide: BorderSide(
-                                                      color: Colors.transparent,
-                                                      width: 1.0,
+                                                        35.0, 0.0, 35.0, 0.0),
+                                                child: TextFormField(
+                                                  controller: _model
+                                                      .txtTituloController,
+                                                  focusNode:
+                                                      _model.txtTituloFocusNode,
+                                                  obscureText: false,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Titulo',
+                                                    labelStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              fontSize: 15.0,
+                                                            ),
+                                                    hintStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              fontSize: 15.0,
+                                                            ),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .primaryBackground,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            8.0),
-                                                  ),
-                                                ),
-                                              ),
-                                              ClipRRect(
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                                child: Image.network(
-                                                  _model.uploadedFileUrl,
-                                                  width: 300.0,
-                                                  height: 200.0,
-                                                  fit: BoxFit.cover,
-                                                ),
-                                              ),
-                                            ],
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 368.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      35.0, 0.0, 35.0, 0.0),
-                                              child: TextFormField(
-                                                controller:
-                                                    _model.txtTituloController,
-                                                focusNode:
-                                                    _model.txtTituloFocusNode,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Titulo',
-                                                  labelStyle: FlutterFlowTheme
-                                                          .of(context)
-                                                      .labelMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .secondaryText,
-                                                        fontSize: 15.0,
+                                                                .tertiary,
+                                                        width: 2.0,
                                                       ),
-                                                  hintStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Readex Pro',
-                                                            fontSize: 15.0,
-                                                          ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: FlutterFlowTheme
-                                                              .of(context)
-                                                          .primaryBackground,
-                                                      width: 2.0,
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
                                                     ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .tertiary,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  errorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .error,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .error,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                ),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 15.0,
-                                                        ),
-                                                textAlign: TextAlign.start,
-                                                validator: _model
-                                                    .txtTituloControllerValidator
-                                                    .asValidator(context),
-                                              ),
-                                            ),
-                                          ),
-                                        ],
-                                      ),
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 430.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Expanded(
-                                            child: Padding(
-                                              padding: EdgeInsetsDirectional
-                                                  .fromSTEB(
-                                                      35.0, 0.0, 35.0, 0.0),
-                                              child: TextFormField(
-                                                controller: _model
-                                                    .txtDescripcionController,
-                                                focusNode: _model
-                                                    .txtDescripcionFocusNode,
-                                                obscureText: false,
-                                                decoration: InputDecoration(
-                                                  labelText: 'Descripcion',
-                                                  labelStyle: FlutterFlowTheme
-                                                          .of(context)
-                                                      .labelMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
+                                                    errorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
                                                         color:
                                                             FlutterFlowTheme.of(
                                                                     context)
-                                                                .secondaryText,
+                                                                .error,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                    focusedErrorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .error,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
                                                         fontSize: 15.0,
                                                       ),
-                                                  hintStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .labelMedium
-                                                          .override(
-                                                            fontFamily:
-                                                                'Readex Pro',
-                                                            fontSize: 15.0,
-                                                          ),
-                                                  enabledBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color: FlutterFlowTheme
-                                                              .of(context)
-                                                          .primaryBackground,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  focusedBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .tertiary,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  errorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .error,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
-                                                  focusedErrorBorder:
-                                                      OutlineInputBorder(
-                                                    borderSide: BorderSide(
-                                                      color:
-                                                          FlutterFlowTheme.of(
-                                                                  context)
-                                                              .error,
-                                                      width: 2.0,
-                                                    ),
-                                                    borderRadius:
-                                                        BorderRadius.circular(
-                                                            25.0),
-                                                  ),
+                                                  textAlign: TextAlign.start,
+                                                  validator: _model
+                                                      .txtTituloControllerValidator
+                                                      .asValidator(context),
                                                 ),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          fontSize: 15.0,
-                                                        ),
-                                                textAlign: TextAlign.start,
-                                                maxLines: 5,
-                                                validator: _model
-                                                    .txtDescripcionControllerValidator
-                                                    .asValidator(context),
                                               ),
                                             ),
-                                          ),
-                                        ],
+                                          ],
+                                        ),
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 430.0, 0.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Expanded(
+                                              child: Padding(
+                                                padding: EdgeInsetsDirectional
+                                                    .fromSTEB(
+                                                        35.0, 0.0, 35.0, 0.0),
+                                                child: TextFormField(
+                                                  controller: _model
+                                                      .txtDescripcionController,
+                                                  focusNode: _model
+                                                      .txtDescripcionFocusNode,
+                                                  obscureText: false,
+                                                  decoration: InputDecoration(
+                                                    labelText: 'Descripcion',
+                                                    labelStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              color: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .secondaryText,
+                                                              fontSize: 15.0,
+                                                            ),
+                                                    hintStyle:
+                                                        FlutterFlowTheme.of(
+                                                                context)
+                                                            .labelMedium
+                                                            .override(
+                                                              fontFamily:
+                                                                  'Readex Pro',
+                                                              fontSize: 15.0,
+                                                            ),
+                                                    enabledBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color: FlutterFlowTheme
+                                                                .of(context)
+                                                            .primaryBackground,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                    focusedBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .tertiary,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                    errorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .error,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                    focusedErrorBorder:
+                                                        OutlineInputBorder(
+                                                      borderSide: BorderSide(
+                                                        color:
+                                                            FlutterFlowTheme.of(
+                                                                    context)
+                                                                .error,
+                                                        width: 2.0,
+                                                      ),
+                                                      borderRadius:
+                                                          BorderRadius.circular(
+                                                              25.0),
+                                                    ),
+                                                  ),
+                                                  style: FlutterFlowTheme.of(
+                                                          context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        fontSize: 15.0,
+                                                      ),
+                                                  textAlign: TextAlign.start,
+                                                  maxLines: 5,
+                                                  validator: _model
+                                                      .txtDescripcionControllerValidator
+                                                      .asValidator(context),
+                                                ),
+                                              ),
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
                               ),
                             ],
@@ -699,6 +722,21 @@ class _AddElementCatalogAdminWidgetState
                                 imagen: _model.uploadedFileUrl,
                                 categoria: _model.ddCategoriaValue,
                               ));
+                          await showDialog(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                content: Text('Catálogo agregado exitosamente'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext),
+                                    child: Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         text: 'Aceptar',
                         icon: Icon(

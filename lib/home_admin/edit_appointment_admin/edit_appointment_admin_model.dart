@@ -18,9 +18,9 @@ class EditAppointmentAdminModel
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
-  // State field(s) for DropDown widget.
-  String? dropDownValue;
-  FormFieldController<String>? dropDownValueController;
+  // State field(s) for ddEstado widget.
+  String? ddEstadoValue;
+  FormFieldController<String>? ddEstadoValueController;
 
   /// Initialization and disposal methods.
 

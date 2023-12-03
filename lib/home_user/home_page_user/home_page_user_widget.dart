@@ -4,8 +4,10 @@ import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/home_admin/search_results/search_results_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_page_user_model.dart';
@@ -34,8 +36,8 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
     super.initState();
     _model = createModel(context, () => HomePageUserModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.txtBuscarController ??= TextEditingController();
+    _model.txtBuscarFocusNode ??= FocusNode();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -392,8 +394,32 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                           padding: EdgeInsetsDirectional.fromSTEB(
                               45.0, 0.0, 45.0, 0.0),
                           child: TextFormField(
-                            controller: _model.textController,
-                            focusNode: _model.textFieldFocusNode,
+                            controller: _model.txtBuscarController,
+                            focusNode: _model.txtBuscarFocusNode,
+                            onFieldSubmitted: (_) async {
+                              await showModalBottomSheet(
+                                isScrollControlled: true,
+                                backgroundColor: Colors.transparent,
+                                enableDrag: false,
+                                context: context,
+                                builder: (context) {
+                                  return GestureDetector(
+                                    onTap: () => _model
+                                            .unfocusNode.canRequestFocus
+                                        ? FocusScope.of(context)
+                                            .requestFocus(_model.unfocusNode)
+                                        : FocusScope.of(context).unfocus(),
+                                    child: Padding(
+                                      padding: MediaQuery.viewInsetsOf(context),
+                                      child: SearchResultsWidget(
+                                        pBuscar:
+                                            _model.txtBuscarController.text,
+                                      ),
+                                    ),
+                                  );
+                                },
+                              ).then((value) => safeSetState(() {}));
+                            },
                             obscureText: false,
                             decoration: InputDecoration(
                               labelStyle:
@@ -442,7 +468,7 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                             style: FlutterFlowTheme.of(context).bodyMedium,
                             textAlign: TextAlign.start,
                             cursorColor: FlutterFlowTheme.of(context).primary,
-                            validator: _model.textControllerValidator
+                            validator: _model.txtBuscarControllerValidator
                                 .asValidator(context),
                           ),
                         ),
@@ -545,12 +571,15 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                                child: SpinKitWanderingCubes(
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 80.0,
                                 ),
                               ),
                             ),
@@ -817,12 +846,16 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                             // Customize what your widget looks like when it's loading.
                             if (!snapshot.hasData) {
                               return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      20.0, 0.0, 0.0, 0.0),
+                                  child: SizedBox(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    child: SpinKitWanderingCubes(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      size: 80.0,
                                     ),
                                   ),
                                 ),
@@ -1087,12 +1120,15 @@ class _HomePageUserWidgetState extends State<HomePageUserWidget> {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                                child: SpinKitWanderingCubes(
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 80.0,
                                 ),
                               ),
                             ),

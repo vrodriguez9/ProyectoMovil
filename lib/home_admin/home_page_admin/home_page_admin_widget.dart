@@ -1,11 +1,17 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
+import '/home_admin/search_results/search_results_widget.dart';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'home_page_admin_model.dart';
@@ -24,10 +30,50 @@ class HomePageAdminWidget extends StatefulWidget {
   _HomePageAdminWidgetState createState() => _HomePageAdminWidgetState();
 }
 
-class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
+class _HomePageAdminWidgetState extends State<HomePageAdminWidget>
+    with TickerProviderStateMixin {
   late HomePageAdminModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = {
+    'listTileOnPageLoadAnimation1': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(-95.0, 0.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+    'listTileOnPageLoadAnimation2': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(-93.0, 0.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+    'listTileOnPageLoadAnimation3': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(-100.0, 0.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+  };
 
   @override
   void initState() {
@@ -176,7 +222,8 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                     .secondaryBackground,
                                 dense: false,
                               ),
-                            ),
+                            ).animateOnPageLoad(
+                                animationsMap['listTileOnPageLoadAnimation1']!),
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -208,7 +255,8 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                     .secondaryBackground,
                                 dense: false,
                               ),
-                            ),
+                            ).animateOnPageLoad(
+                                animationsMap['listTileOnPageLoadAnimation2']!),
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -240,7 +288,8 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                                     .secondaryBackground,
                                 dense: false,
                               ),
-                            ),
+                            ).animateOnPageLoad(
+                                animationsMap['listTileOnPageLoadAnimation3']!),
                             InkWell(
                               splashColor: Colors.transparent,
                               focusColor: Colors.transparent,
@@ -387,6 +436,35 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                           child: TextFormField(
                             controller: _model.txtBuscarController,
                             focusNode: _model.txtBuscarFocusNode,
+                            onChanged: (_) => EasyDebounce.debounce(
+                              '_model.txtBuscarController',
+                              Duration(milliseconds: 2000),
+                              () async {
+                                await showModalBottomSheet(
+                                  isScrollControlled: true,
+                                  backgroundColor: Colors.transparent,
+                                  enableDrag: false,
+                                  context: context,
+                                  builder: (context) {
+                                    return GestureDetector(
+                                      onTap: () => _model
+                                              .unfocusNode.canRequestFocus
+                                          ? FocusScope.of(context)
+                                              .requestFocus(_model.unfocusNode)
+                                          : FocusScope.of(context).unfocus(),
+                                      child: Padding(
+                                        padding:
+                                            MediaQuery.viewInsetsOf(context),
+                                        child: SearchResultsWidget(
+                                          pBuscar:
+                                              _model.txtBuscarController.text,
+                                        ),
+                                      ),
+                                    );
+                                  },
+                                ).then((value) => safeSetState(() {}));
+                              },
+                            ),
                             obscureText: false,
                             decoration: InputDecoration(
                               labelStyle:
@@ -537,12 +615,15 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                                child: SpinKitWanderingCubes(
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 80.0,
                                 ),
                               ),
                             ),
@@ -820,12 +901,16 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                             // Customize what your widget looks like when it's loading.
                             if (!snapshot.hasData) {
                               return Center(
-                                child: SizedBox(
-                                  width: 50.0,
-                                  height: 50.0,
-                                  child: CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(
-                                      FlutterFlowTheme.of(context).primary,
+                                child: Padding(
+                                  padding: EdgeInsetsDirectional.fromSTEB(
+                                      20.0, 0.0, 0.0, 0.0),
+                                  child: SizedBox(
+                                    width: 80.0,
+                                    height: 80.0,
+                                    child: SpinKitWanderingCubes(
+                                      color: FlutterFlowTheme.of(context)
+                                          .secondary,
+                                      size: 80.0,
                                     ),
                                   ),
                                 ),
@@ -1097,12 +1182,15 @@ class _HomePageAdminWidgetState extends State<HomePageAdminWidget> {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                                child: SpinKitWanderingCubes(
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 80.0,
                                 ),
                               ),
                             ),

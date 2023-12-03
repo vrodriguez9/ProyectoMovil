@@ -1,11 +1,14 @@
 import '/auth/firebase_auth/auth_util.dart';
 import '/backend/backend.dart';
+import '/flutter_flow/flutter_flow_autocomplete_options_list.dart';
 import '/flutter_flow/flutter_flow_drop_down.dart';
 import '/flutter_flow/flutter_flow_icon_button.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
+import 'dart:async';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -30,8 +33,7 @@ class _QuotesWidgetState extends State<QuotesWidget> {
     super.initState();
     _model = createModel(context, () => QuotesModel());
 
-    _model.textController ??= TextEditingController();
-    _model.textFieldFocusNode ??= FocusNode();
+    _model.txtBuscarController ??= TextEditingController();
 
     WidgetsBinding.instance.addPostFrameCallback((_) => setState(() {}));
   }
@@ -367,59 +369,157 @@ class _QuotesWidgetState extends State<QuotesWidget> {
                         child: Padding(
                           padding: EdgeInsetsDirectional.fromSTEB(
                               45.0, 0.0, 45.0, 0.0),
-                          child: TextFormField(
-                            controller: _model.textController,
-                            focusNode: _model.textFieldFocusNode,
-                            obscureText: false,
-                            decoration: InputDecoration(
-                              labelStyle:
-                                  FlutterFlowTheme.of(context).labelMedium,
-                              hintText: 'Buscar aqui',
-                              hintStyle:
-                                  FlutterFlowTheme.of(context).labelMedium,
-                              enabledBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context)
-                                      .primaryBackground,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              focusedBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).primary,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              errorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).error,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              focusedErrorBorder: OutlineInputBorder(
-                                borderSide: BorderSide(
-                                  color: FlutterFlowTheme.of(context).error,
-                                  width: 2.0,
-                                ),
-                                borderRadius: BorderRadius.circular(18.0),
-                              ),
-                              filled: true,
-                              fillColor: FlutterFlowTheme.of(context)
-                                  .secondaryBackground,
-                              contentPadding: EdgeInsetsDirectional.fromSTEB(
-                                  30.0, 30.0, 30.0, 30.0),
-                              prefixIcon: Icon(
-                                Icons.search,
-                              ),
-                            ),
-                            style: FlutterFlowTheme.of(context).bodyMedium,
-                            textAlign: TextAlign.start,
-                            cursorColor: FlutterFlowTheme.of(context).primary,
-                            validator: _model.textControllerValidator
-                                .asValidator(context),
+                          child: StreamBuilder<List<CotizacionesRecord>>(
+                            stream: queryCotizacionesRecord(),
+                            builder: (context, snapshot) {
+                              // Customize what your widget looks like when it's loading.
+                              if (!snapshot.hasData) {
+                                return Center(
+                                  child: SizedBox(
+                                    width: 50.0,
+                                    height: 50.0,
+                                    child: CircularProgressIndicator(
+                                      valueColor: AlwaysStoppedAnimation<Color>(
+                                        FlutterFlowTheme.of(context).primary,
+                                      ),
+                                    ),
+                                  ),
+                                );
+                              }
+                              List<CotizacionesRecord>
+                                  txtBuscarCotizacionesRecordList =
+                                  snapshot.data!;
+                              return Autocomplete<String>(
+                                initialValue: TextEditingValue(),
+                                optionsBuilder: (textEditingValue) {
+                                  if (textEditingValue.text == '') {
+                                    return const Iterable<String>.empty();
+                                  }
+                                  return txtBuscarCotizacionesRecordList
+                                      .map((e) => e.nombreCliente)
+                                      .toList()
+                                      .where((option) {
+                                    final lowercaseOption =
+                                        option.toLowerCase();
+                                    return lowercaseOption.contains(
+                                        textEditingValue.text.toLowerCase());
+                                  });
+                                },
+                                optionsViewBuilder:
+                                    (context, onSelected, options) {
+                                  return AutocompleteOptionsList(
+                                    textFieldKey: _model.txtBuscarKey,
+                                    textController: _model.txtBuscarController!,
+                                    options: options.toList(),
+                                    onSelected: onSelected,
+                                    textStyle:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    textHighlightStyle: TextStyle(),
+                                    elevation: 4.0,
+                                    optionBackgroundColor:
+                                        FlutterFlowTheme.of(context)
+                                            .primaryBackground,
+                                    optionHighlightColor:
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryBackground,
+                                    maxHeight: 200.0,
+                                  );
+                                },
+                                onSelected: (String selection) {
+                                  setState(() => _model
+                                      .txtBuscarSelectedOption = selection);
+                                  FocusScope.of(context).unfocus();
+                                },
+                                fieldViewBuilder: (
+                                  context,
+                                  textEditingController,
+                                  focusNode,
+                                  onEditingComplete,
+                                ) {
+                                  _model.txtBuscarFocusNode = focusNode;
+
+                                  _model.txtBuscarController =
+                                      textEditingController;
+                                  return TextFormField(
+                                    key: _model.txtBuscarKey,
+                                    controller: textEditingController,
+                                    focusNode: focusNode,
+                                    onEditingComplete: onEditingComplete,
+                                    onChanged: (_) => EasyDebounce.debounce(
+                                      '_model.txtBuscarController',
+                                      Duration(milliseconds: 2000),
+                                      () async {
+                                        setState(() => _model
+                                            .firestoreRequestCompleter = null);
+                                        await _model
+                                            .waitForFirestoreRequestCompleted();
+                                      },
+                                    ),
+                                    obscureText: false,
+                                    decoration: InputDecoration(
+                                      labelStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium,
+                                      hintText: 'Buscar aqui',
+                                      hintStyle: FlutterFlowTheme.of(context)
+                                          .labelMedium,
+                                      enabledBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primaryBackground,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      focusedBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .primary,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      errorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      focusedErrorBorder: OutlineInputBorder(
+                                        borderSide: BorderSide(
+                                          color: FlutterFlowTheme.of(context)
+                                              .error,
+                                          width: 2.0,
+                                        ),
+                                        borderRadius:
+                                            BorderRadius.circular(18.0),
+                                      ),
+                                      filled: true,
+                                      fillColor: FlutterFlowTheme.of(context)
+                                          .secondaryBackground,
+                                      contentPadding:
+                                          EdgeInsetsDirectional.fromSTEB(
+                                              30.0, 30.0, 30.0, 30.0),
+                                      prefixIcon: Icon(
+                                        Icons.search,
+                                      ),
+                                    ),
+                                    style:
+                                        FlutterFlowTheme.of(context).bodyMedium,
+                                    textAlign: TextAlign.start,
+                                    cursorColor:
+                                        FlutterFlowTheme.of(context).primary,
+                                    validator: _model
+                                        .txtBuscarControllerValidator
+                                        .asValidator(context),
+                                  );
+                                },
+                              );
+                            },
                           ),
                         ),
                       ),
@@ -518,14 +618,31 @@ class _QuotesWidgetState extends State<QuotesWidget> {
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).secondaryBackground,
                     ),
-                    child: StreamBuilder<List<CotizacionesRecord>>(
-                      stream: queryCotizacionesRecord(
-                        queryBuilder: (cotizacionesRecord) =>
-                            cotizacionesRecord.where(
-                          'estado',
-                          isEqualTo: _model.ddFiltrarValue,
-                        ),
-                      ),
+                    child: FutureBuilder<List<CotizacionesRecord>>(
+                      future: (_model.firestoreRequestCompleter ??=
+                              Completer<List<CotizacionesRecord>>()
+                                ..complete(queryCotizacionesRecordOnce(
+                                  queryBuilder: (cotizacionesRecord) =>
+                                      cotizacionesRecord
+                                          .where(
+                                            'estado',
+                                            isEqualTo:
+                                                _model.ddFiltrarValue != ''
+                                                    ? _model.ddFiltrarValue
+                                                    : null,
+                                          )
+                                          .where(
+                                            'nombreCliente',
+                                            isEqualTo: _model
+                                                        .txtBuscarController
+                                                        .text !=
+                                                    ''
+                                                ? _model
+                                                    .txtBuscarController.text
+                                                : null,
+                                          ),
+                                )))
+                          .future,
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
@@ -543,211 +660,294 @@ class _QuotesWidgetState extends State<QuotesWidget> {
                         }
                         List<CotizacionesRecord>
                             listViewCotizacionesRecordList = snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewCotizacionesRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewCotizacionesRecord =
-                                listViewCotizacionesRecordList[listViewIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  0.0, 0.0, 0.0, 15.0),
-                              child: Container(
-                                width: MediaQuery.sizeOf(context).width * 1.0,
-                                height: 305.0,
-                                decoration: BoxDecoration(
-                                  color: FlutterFlowTheme.of(context)
-                                      .secondaryBackground,
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.start,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.start,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            width: 100.0,
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height *
-                                                0.05,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(0.0),
-                                                bottomRight:
-                                                    Radius.circular(0.0),
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
-                                              ),
-                                            ),
-                                            alignment: AlignmentDirectional(
-                                                0.00, 0.00),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Cliente: ',
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        fontSize: 24.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                                Text(
-                                                  listViewCotizacionesRecord
-                                                      .nombreCliente,
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        fontSize: 24.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 52.0, 0.0, 0.0),
-                                      child: Row(
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            setState(
+                                () => _model.firestoreRequestCompleter = null);
+                            await _model.waitForFirestoreRequestCompleted();
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            scrollDirection: Axis.vertical,
+                            itemCount: listViewCotizacionesRecordList.length,
+                            itemBuilder: (context, listViewIndex) {
+                              final listViewCotizacionesRecord =
+                                  listViewCotizacionesRecordList[listViewIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    0.0, 0.0, 0.0, 15.0),
+                                child: Container(
+                                  width: MediaQuery.sizeOf(context).width * 1.0,
+                                  height: 305.0,
+                                  decoration: BoxDecoration(
+                                    color: FlutterFlowTheme.of(context).primary,
+                                    borderRadius: BorderRadius.circular(20.0),
+                                  ),
+                                  child: Stack(
+                                    children: [
+                                      Row(
                                         mainAxisSize: MainAxisSize.max,
                                         mainAxisAlignment:
-                                            MainAxisAlignment.center,
+                                            MainAxisAlignment.start,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
                                         children: [
-                                          Column(
-                                            mainAxisSize: MainAxisSize.max,
-                                            mainAxisAlignment:
-                                                MainAxisAlignment.spaceAround,
-                                            children: [
-                                              Text(
-                                                listViewCotizacionesRecord
-                                                    .nombreProducto,
-                                                textAlign: TextAlign.center,
-                                                style:
+                                          Expanded(
+                                            child: Container(
+                                              width: 100.0,
+                                              height: MediaQuery.sizeOf(context)
+                                                      .height *
+                                                  0.05,
+                                              decoration: BoxDecoration(
+                                                color:
                                                     FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
-                                              ),
-                                              Text(
-                                                listViewCotizacionesRecord
-                                                    .cantidad
-                                                    .toString(),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
-                                              ),
-                                              Text(
-                                                valueOrDefault<String>(
-                                                  listViewCotizacionesRecord
-                                                      .mensaje,
-                                                  'Sin mensaje.',
+                                                        .tertiary,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(0.0),
+                                                  bottomRight:
+                                                      Radius.circular(0.0),
+                                                  topLeft:
+                                                      Radius.circular(20.0),
+                                                  topRight:
+                                                      Radius.circular(20.0),
                                                 ),
-                                                style:
-                                                    FlutterFlowTheme.of(context)
-                                                        .bodyMedium,
                                               ),
-                                              Row(
+                                              alignment: AlignmentDirectional(
+                                                  0.00, 0.00),
+                                              child: Row(
                                                 mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
                                                 children: [
                                                   Text(
-                                                    'Estado: ',
+                                                    'Cliente: ',
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyMedium,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          fontSize: 24.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                   ),
                                                   Text(
                                                     listViewCotizacionesRecord
-                                                        .estado,
+                                                        .nombreCliente,
+                                                    textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
-                                                        .bodyMedium,
+                                                        .bodyMedium
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          fontSize: 24.0,
+                                                          fontWeight:
+                                                              FontWeight.bold,
+                                                        ),
                                                   ),
                                                 ],
                                               ),
-                                              FFButtonWidget(
-                                                onPressed: () async {
-                                                  context.pushNamed(
-                                                    'EditQuote',
-                                                    queryParameters: {
-                                                      'pCotizacion':
-                                                          serializeParam(
-                                                        listViewCotizacionesRecord,
-                                                        ParamType.Document,
-                                                      ),
-                                                    }.withoutNulls,
-                                                    extra: <String, dynamic>{
-                                                      'pCotizacion':
-                                                          listViewCotizacionesRecord,
-                                                    },
-                                                  );
-                                                },
-                                                text: 'Editar',
-                                                options: FFButtonOptions(
-                                                  height: 40.0,
-                                                  padding: EdgeInsetsDirectional
-                                                      .fromSTEB(
-                                                          24.0, 0.0, 24.0, 0.0),
-                                                  iconPadding:
-                                                      EdgeInsetsDirectional
-                                                          .fromSTEB(0.0, 0.0,
-                                                              0.0, 0.0),
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .accent1,
-                                                  textStyle:
-                                                      FlutterFlowTheme.of(
-                                                              context)
-                                                          .titleSmall
-                                                          .override(
-                                                            fontFamily:
-                                                                'Readex Pro',
-                                                            color: Colors.white,
-                                                          ),
-                                                  elevation: 3.0,
-                                                  borderSide: BorderSide(
-                                                    color: Colors.transparent,
-                                                    width: 1.0,
-                                                  ),
-                                                  borderRadius:
-                                                      BorderRadius.circular(
-                                                          20.0),
-                                                ),
-                                              ),
-                                            ],
+                                            ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                  ],
+                                      Padding(
+                                        padding: EdgeInsetsDirectional.fromSTEB(
+                                            0.0, 52.0, 0.0, 0.0),
+                                        child: Row(
+                                          mainAxisSize: MainAxisSize.max,
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: [
+                                            Column(
+                                              mainAxisSize: MainAxisSize.max,
+                                              mainAxisAlignment:
+                                                  MainAxisAlignment.spaceAround,
+                                              children: [
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Producto solicitado: ',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                    Text(
+                                                      listViewCotizacionesRecord
+                                                          .nombreProducto,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Cantidad: ',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                    Text(
+                                                      listViewCotizacionesRecord
+                                                          .cantidad
+                                                          .toString(),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Mensaje: ',
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                    Text(
+                                                      valueOrDefault<String>(
+                                                        listViewCotizacionesRecord
+                                                            .mensaje,
+                                                        'Sin mensaje.',
+                                                      ),
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                Row(
+                                                  mainAxisSize:
+                                                      MainAxisSize.max,
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: [
+                                                    Text(
+                                                      'Estado: ',
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style:
+                                                          FlutterFlowTheme.of(
+                                                                  context)
+                                                              .bodyMedium,
+                                                    ),
+                                                    Text(
+                                                      listViewCotizacionesRecord
+                                                          .estado,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontWeight:
+                                                                FontWeight.w600,
+                                                          ),
+                                                    ),
+                                                  ],
+                                                ),
+                                                FFButtonWidget(
+                                                  onPressed: () async {
+                                                    context.pushNamed(
+                                                      'EditQuote',
+                                                      queryParameters: {
+                                                        'pCotizacion':
+                                                            serializeParam(
+                                                          listViewCotizacionesRecord,
+                                                          ParamType.Document,
+                                                        ),
+                                                      }.withoutNulls,
+                                                      extra: <String, dynamic>{
+                                                        'pCotizacion':
+                                                            listViewCotizacionesRecord,
+                                                      },
+                                                    );
+                                                  },
+                                                  text: 'Editar',
+                                                  options: FFButtonOptions(
+                                                    height: 40.0,
+                                                    padding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(24.0, 0.0,
+                                                                24.0, 0.0),
+                                                    iconPadding:
+                                                        EdgeInsetsDirectional
+                                                            .fromSTEB(0.0, 0.0,
+                                                                0.0, 0.0),
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .accent1,
+                                                    textStyle: FlutterFlowTheme
+                                                            .of(context)
+                                                        .titleSmall
+                                                        .override(
+                                                          fontFamily:
+                                                              'Readex Pro',
+                                                          color: Colors.white,
+                                                        ),
+                                                    elevation: 3.0,
+                                                    borderSide: BorderSide(
+                                                      color: Colors.transparent,
+                                                      width: 1.0,
+                                                    ),
+                                                    borderRadius:
+                                                        BorderRadius.circular(
+                                                            20.0),
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

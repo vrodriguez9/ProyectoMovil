@@ -1,10 +1,13 @@
 import '/auth/firebase_auth/auth_util.dart';
+import '/flutter_flow/flutter_flow_animations.dart';
 import '/flutter_flow/flutter_flow_theme.dart';
 import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'login_model.dart';
@@ -17,10 +20,66 @@ class LoginWidget extends StatefulWidget {
   _LoginWidgetState createState() => _LoginWidgetState();
 }
 
-class _LoginWidgetState extends State<LoginWidget> {
+class _LoginWidgetState extends State<LoginWidget>
+    with TickerProviderStateMixin {
   late LoginModel _model;
 
   final scaffoldKey = GlobalKey<ScaffoldState>();
+
+  final animationsMap = {
+    'imageOnPageLoadAnimation': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        VisibilityEffect(duration: 1.ms),
+        MoveEffect(
+          curve: Curves.easeIn,
+          delay: 0.ms,
+          duration: 550.ms,
+          begin: Offset(-100.0, 0.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+    'textOnPageLoadAnimation1': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        VisibilityEffect(duration: 1.ms),
+        MoveEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: Offset(0.0, 100.0),
+          end: Offset(0.0, 0.0),
+        ),
+      ],
+    ),
+    'textOnPageLoadAnimation2': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        VisibilityEffect(duration: 1.ms),
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: 0.0,
+          end: 1.0,
+        ),
+      ],
+    ),
+    'textOnPageLoadAnimation3': AnimationInfo(
+      trigger: AnimationTrigger.onPageLoad,
+      effects: [
+        VisibilityEffect(duration: 1.ms),
+        FadeEffect(
+          curve: Curves.easeInOut,
+          delay: 0.ms,
+          duration: 600.ms,
+          begin: 0.0,
+          end: 1.0,
+        ),
+      ],
+    ),
+  };
 
   @override
   void initState() {
@@ -88,7 +147,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                           height: 60.0,
                           fit: BoxFit.contain,
                         ),
-                      ),
+                      ).animateOnPageLoad(
+                          animationsMap['imageOnPageLoadAnimation']!),
                     ),
                   ],
                 ),
@@ -102,7 +162,7 @@ class _LoginWidgetState extends State<LoginWidget> {
                         fontSize: 15.0,
                         fontWeight: FontWeight.bold,
                       ),
-                ),
+                ).animateOnPageLoad(animationsMap['textOnPageLoadAnimation1']!),
               ),
               Padding(
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 50.0, 0.0, 0.0),
@@ -117,7 +177,8 @@ class _LoginWidgetState extends State<LoginWidget> {
                             fontSize: 20.0,
                             fontWeight: FontWeight.w600,
                           ),
-                    ),
+                    ).animateOnPageLoad(
+                        animationsMap['textOnPageLoadAnimation2']!),
                   ],
                 ),
               ),
@@ -139,202 +200,213 @@ class _LoginWidgetState extends State<LoginWidget> {
                                     fontFamily: 'Readex Pro',
                                     fontWeight: FontWeight.w600,
                                   ),
-                        ),
+                        ).animateOnPageLoad(
+                            animationsMap['textOnPageLoadAnimation3']!),
                       ),
                     ),
                   ],
                 ),
               ),
-              Padding(
-                padding: EdgeInsetsDirectional.fromSTEB(20.0, 50.0, 20.0, 0.0),
-                child: Column(
-                  mainAxisSize: MainAxisSize.max,
-                  children: [
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
-                      child: TextFormField(
-                        controller: _model.txtCorreoController,
-                        focusNode: _model.txtCorreoFocusNode,
-                        autofocus: true,
-                        autofillHints: [AutofillHints.email],
-                        obscureText: false,
-                        decoration: InputDecoration(
-                          labelText: 'Correo',
-                          labelStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
+              Form(
+                key: _model.formKey,
+                autovalidateMode: AutovalidateMode.always,
+                child: Padding(
+                  padding:
+                      EdgeInsetsDirectional.fromSTEB(20.0, 50.0, 20.0, 0.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.max,
+                    children: [
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
+                        child: TextFormField(
+                          controller: _model.txtCorreoController,
+                          focusNode: _model.txtCorreoFocusNode,
+                          autofocus: true,
+                          autofillHints: [AutofillHints.email],
+                          obscureText: false,
+                          decoration: InputDecoration(
+                            labelText: 'Correo',
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  color:
+                                      FlutterFlowTheme.of(context).primaryText,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFFF5963),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFFF5963),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 24.0, 24.0, 24.0),
+                          ),
+                          style: FlutterFlowTheme.of(context)
+                              .bodyMedium
                               .override(
-                                fontFamily: 'Plus Jakarta Sans',
+                                fontFamily: 'Roboto',
                                 color: FlutterFlowTheme.of(context).primaryText,
                                 fontSize: 14.0,
                                 fontWeight: FontWeight.w500,
                               ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).secondary,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFFF5963),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFFF5963),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 24.0, 24.0, 24.0),
+                          keyboardType: TextInputType.emailAddress,
+                          validator: _model.txtCorreoControllerValidator
+                              .asValidator(context),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Roboto',
-                              color: FlutterFlowTheme.of(context).primaryText,
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                        keyboardType: TextInputType.emailAddress,
-                        validator: _model.txtCorreoControllerValidator
-                            .asValidator(context),
                       ),
-                    ),
-                    Padding(
-                      padding:
-                          EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
-                      child: TextFormField(
-                        controller: _model.txtContraseniaController,
-                        focusNode: _model.txtContraseniaFocusNode,
-                        autofillHints: [AutofillHints.password],
-                        obscureText: !_model.txtContraseniaVisibility,
-                        decoration: InputDecoration(
-                          labelText: 'Contraseña',
-                          labelStyle: FlutterFlowTheme.of(context)
-                              .labelMedium
-                              .override(
-                                fontFamily: 'Plus Jakarta Sans',
+                      Padding(
+                        padding:
+                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 30.0),
+                        child: TextFormField(
+                          controller: _model.txtContraseniaController,
+                          focusNode: _model.txtContraseniaFocusNode,
+                          autofillHints: [AutofillHints.password],
+                          obscureText: !_model.txtContraseniaVisibility,
+                          decoration: InputDecoration(
+                            labelText: 'Contraseña',
+                            labelStyle: FlutterFlowTheme.of(context)
+                                .labelMedium
+                                .override(
+                                  fontFamily: 'Plus Jakarta Sans',
+                                  color: FlutterFlowTheme.of(context)
+                                      .secondaryText,
+                                  fontSize: 14.0,
+                                  fontWeight: FontWeight.w500,
+                                ),
+                            enabledBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context)
+                                    .primaryBackground,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            errorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFFF5963),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            focusedErrorBorder: OutlineInputBorder(
+                              borderSide: BorderSide(
+                                color: Color(0xFFFF5963),
+                                width: 2.0,
+                              ),
+                              borderRadius: BorderRadius.circular(25.0),
+                            ),
+                            filled: true,
+                            fillColor: Colors.white,
+                            contentPadding: EdgeInsetsDirectional.fromSTEB(
+                                24.0, 24.0, 24.0, 24.0),
+                            suffixIcon: InkWell(
+                              onTap: () => setState(
+                                () => _model.txtContraseniaVisibility =
+                                    !_model.txtContraseniaVisibility,
+                              ),
+                              focusNode: FocusNode(skipTraversal: true),
+                              child: Icon(
+                                _model.txtContraseniaVisibility
+                                    ? Icons.visibility_outlined
+                                    : Icons.visibility_off_outlined,
                                 color:
                                     FlutterFlowTheme.of(context).secondaryText,
-                                fontSize: 14.0,
-                                fontWeight: FontWeight.w500,
+                                size: 24.0,
                               ),
-                          enabledBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context)
-                                  .primaryBackground,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: FlutterFlowTheme.of(context).secondary,
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          errorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFFF5963),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          focusedErrorBorder: OutlineInputBorder(
-                            borderSide: BorderSide(
-                              color: Color(0xFFFF5963),
-                              width: 2.0,
-                            ),
-                            borderRadius: BorderRadius.circular(25.0),
-                          ),
-                          filled: true,
-                          fillColor: Colors.white,
-                          contentPadding: EdgeInsetsDirectional.fromSTEB(
-                              24.0, 24.0, 24.0, 24.0),
-                          suffixIcon: InkWell(
-                            onTap: () => setState(
-                              () => _model.txtContraseniaVisibility =
-                                  !_model.txtContraseniaVisibility,
-                            ),
-                            focusNode: FocusNode(skipTraversal: true),
-                            child: Icon(
-                              _model.txtContraseniaVisibility
-                                  ? Icons.visibility_outlined
-                                  : Icons.visibility_off_outlined,
-                              color: FlutterFlowTheme.of(context).secondaryText,
-                              size: 24.0,
                             ),
                           ),
+                          style:
+                              FlutterFlowTheme.of(context).bodyMedium.override(
+                                    fontFamily: 'Plus Jakarta Sans',
+                                    color: Color(0xFF101213),
+                                    fontSize: 14.0,
+                                    fontWeight: FontWeight.w500,
+                                  ),
+                          validator: _model.txtContraseniaControllerValidator
+                              .asValidator(context),
                         ),
-                        style: FlutterFlowTheme.of(context).bodyMedium.override(
-                              fontFamily: 'Plus Jakarta Sans',
-                              color: Color(0xFF101213),
-                              fontSize: 14.0,
-                              fontWeight: FontWeight.w500,
-                            ),
-                        validator: _model.txtContraseniaControllerValidator
-                            .asValidator(context),
                       ),
-                    ),
-                    FFButtonWidget(
-                      onPressed: () async {
-                        GoRouter.of(context).prepareAuthEvent();
+                      FFButtonWidget(
+                        onPressed: () async {
+                          GoRouter.of(context).prepareAuthEvent();
 
-                        final user = await authManager.signInWithEmail(
-                          context,
-                          _model.txtCorreoController.text,
-                          _model.txtContraseniaController.text,
-                        );
-                        if (user == null) {
-                          return;
-                        }
+                          final user = await authManager.signInWithEmail(
+                            context,
+                            _model.txtCorreoController.text,
+                            _model.txtContraseniaController.text,
+                          );
+                          if (user == null) {
+                            return;
+                          }
 
-                        if (valueOrDefault(currentUserDocument?.role, '') ==
-                            'admin') {
-                          context.pushNamedAuth(
-                              'HomePageAdmin', context.mounted);
-                        } else {
-                          context.pushNamedAuth(
-                              'HomePageUser', context.mounted);
-                        }
-                      },
-                      text: 'Iniciar Sesión',
-                      options: FFButtonOptions(
-                        height: 40.0,
-                        padding: EdgeInsetsDirectional.fromSTEB(
-                            35.0, 0.0, 35.0, 0.0),
-                        iconPadding:
-                            EdgeInsetsDirectional.fromSTEB(0.0, 0.0, 0.0, 0.0),
-                        color: FlutterFlowTheme.of(context).tertiary,
-                        textStyle:
-                            FlutterFlowTheme.of(context).titleSmall.override(
-                                  fontFamily: 'Readex Pro',
-                                  color: Colors.white,
-                                ),
-                        elevation: 3.0,
-                        borderSide: BorderSide(
+                          if (valueOrDefault(currentUserDocument?.role, '') ==
+                              'admin') {
+                            context.pushNamedAuth(
+                                'HomePageAdmin', context.mounted);
+                          } else {
+                            context.pushNamedAuth(
+                                'HomePageUser', context.mounted);
+                          }
+                        },
+                        text: 'Iniciar Sesión',
+                        options: FFButtonOptions(
+                          height: 40.0,
+                          padding: EdgeInsetsDirectional.fromSTEB(
+                              35.0, 0.0, 35.0, 0.0),
+                          iconPadding: EdgeInsetsDirectional.fromSTEB(
+                              0.0, 0.0, 0.0, 0.0),
                           color: FlutterFlowTheme.of(context).tertiary,
-                          width: 1.0,
+                          textStyle:
+                              FlutterFlowTheme.of(context).titleSmall.override(
+                                    fontFamily: 'Readex Pro',
+                                    color: Colors.white,
+                                  ),
+                          elevation: 3.0,
+                          borderSide: BorderSide(
+                            color: FlutterFlowTheme.of(context).tertiary,
+                            width: 1.0,
+                          ),
+                          borderRadius: BorderRadius.circular(15.0),
                         ),
-                        borderRadius: BorderRadius.circular(15.0),
                       ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
               ),
               Row(

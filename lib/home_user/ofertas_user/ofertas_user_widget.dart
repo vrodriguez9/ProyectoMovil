@@ -6,6 +6,7 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'ofertas_user_model.dart';
@@ -197,7 +198,7 @@ class _OfertasUserWidgetState extends State<OfertasUserWidget> {
                 padding: EdgeInsetsDirectional.fromSTEB(0.0, 15.0, 0.0, 0.0),
                 child: Container(
                   width: double.infinity,
-                  height: 783.0,
+                  height: 735.0,
                   decoration: BoxDecoration(
                     color: FlutterFlowTheme.of(context).primaryBackground,
                   ),
@@ -205,19 +206,25 @@ class _OfertasUserWidgetState extends State<OfertasUserWidget> {
                     stream: queryCatalogosRecord(
                       queryBuilder: (catalogosRecord) => catalogosRecord.where(
                         'categoria',
-                        isEqualTo: '',
+                        isEqualTo: valueOrDefault<String>(
+                          '',
+                          'Ofertas',
+                        ),
                       ),
                     ),
                     builder: (context, snapshot) {
                       // Customize what your widget looks like when it's loading.
                       if (!snapshot.hasData) {
                         return Center(
-                          child: SizedBox(
-                            width: 50.0,
-                            height: 50.0,
-                            child: CircularProgressIndicator(
-                              valueColor: AlwaysStoppedAnimation<Color>(
-                                FlutterFlowTheme.of(context).primary,
+                          child: Padding(
+                            padding: EdgeInsetsDirectional.fromSTEB(
+                                20.0, 0.0, 0.0, 0.0),
+                            child: SizedBox(
+                              width: 80.0,
+                              height: 80.0,
+                              child: SpinKitWanderingCubes(
+                                color: FlutterFlowTheme.of(context).secondary,
+                                size: 80.0,
                               ),
                             ),
                           ),
@@ -376,53 +383,6 @@ class _OfertasUserWidgetState extends State<OfertasUserWidget> {
                     },
                   ),
                 ),
-              ),
-              Row(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Container(
-                    width: MediaQuery.sizeOf(context).width * 1.0,
-                    height: MediaQuery.sizeOf(context).height * 0.05,
-                    decoration: BoxDecoration(
-                      color: FlutterFlowTheme.of(context).tertiary,
-                      image: DecorationImage(
-                        fit: BoxFit.cover,
-                        image: Image.network(
-                          'https://st3.depositphotos.com/3018465/17905/v/1600/depositphotos_179058978-stock-illustration-bright-abstract-spots-different-design.jpg',
-                        ).image,
-                      ),
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.max,
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Column(
-                          mainAxisSize: MainAxisSize.max,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: [
-                            Align(
-                              alignment: AlignmentDirectional(0.00, 0.00),
-                              child: Text(
-                                'Rotulaciones',
-                                style: FlutterFlowTheme.of(context)
-                                    .headlineMedium
-                                    .override(
-                                      fontFamily: 'Barlow',
-                                      color:
-                                          FlutterFlowTheme.of(context).primary,
-                                      fontSize: 30.0,
-                                      fontWeight: FontWeight.w900,
-                                      fontStyle: FontStyle.italic,
-                                      useGoogleFonts: false,
-                                    ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
               ),
             ],
           ),

@@ -19,10 +19,19 @@ class AddAppointmentUserModel
   ///  State fields for stateful widgets in this page.
 
   final unfocusNode = FocusNode();
+  final formKey = GlobalKey<FormState>();
   // State field(s) for txtDetails widget.
   FocusNode? txtDetailsFocusNode;
   TextEditingController? txtDetailsController;
   String? Function(BuildContext, String?)? txtDetailsControllerValidator;
+  String? _txtDetailsControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    return null;
+  }
+
   DateTime? datePicked;
   // State field(s) for DropDown widget.
   String? dropDownValue;
@@ -31,10 +40,20 @@ class AddAppointmentUserModel
   FocusNode? txtUserNameFocusNode;
   TextEditingController? txtUserNameController;
   String? Function(BuildContext, String?)? txtUserNameControllerValidator;
+  String? _txtUserNameControllerValidator(BuildContext context, String? val) {
+    if (val == null || val.isEmpty) {
+      return 'Este campo es obligatorio.';
+    }
+
+    return null;
+  }
 
   /// Initialization and disposal methods.
 
-  void initState(BuildContext context) {}
+  void initState(BuildContext context) {
+    txtDetailsControllerValidator = _txtDetailsControllerValidator;
+    txtUserNameControllerValidator = _txtUserNameControllerValidator;
+  }
 
   void dispose() {
     unfocusNode.dispose();

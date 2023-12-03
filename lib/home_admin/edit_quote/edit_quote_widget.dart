@@ -81,7 +81,7 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                 size: 30.0,
               ),
               onPressed: () async {
-                context.pushNamed('HomePageAdmin');
+                context.pushNamed('Quotes');
               },
             ),
           ),
@@ -259,25 +259,57 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                                 mainAxisAlignment:
                                     MainAxisAlignment.spaceAround,
                                 children: [
-                                  Text(
-                                    valueOrDefault<String>(
-                                      widget.pCotizacion?.nombreProducto,
-                                      'Sin producto a solicitar.',
-                                    ),
-                                    textAlign: TextAlign.center,
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
-                                  ),
-                                  Text(
-                                    valueOrDefault<String>(
-                                      widget.pCotizacion?.cantidad?.toString(),
-                                      '0',
-                                    ),
-                                    style:
-                                        FlutterFlowTheme.of(context).bodyMedium,
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Producto solicitado: ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Text(
+                                        valueOrDefault<String>(
+                                          widget.pCotizacion?.nombreProducto,
+                                          'Sin producto a solicitar.',
+                                        ),
+                                        textAlign: TextAlign.center,
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ],
                                   ),
                                   Row(
                                     mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    children: [
+                                      Text(
+                                        'Cantidad: ',
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium,
+                                      ),
+                                      Text(
+                                        valueOrDefault<String>(
+                                          widget.pCotizacion?.cantidad
+                                              ?.toString(),
+                                          '0',
+                                        ),
+                                        style: FlutterFlowTheme.of(context)
+                                            .bodyMedium
+                                            .override(
+                                              fontFamily: 'Readex Pro',
+                                              fontWeight: FontWeight.w600,
+                                            ),
+                                      ),
+                                    ],
+                                  ),
+                                  Row(
+                                    mainAxisSize: MainAxisSize.max,
+                                    mainAxisAlignment: MainAxisAlignment.center,
                                     children: [
                                       Text(
                                         'Estado: ',
@@ -355,6 +387,22 @@ class _EditQuoteWidgetState extends State<EditQuoteWidget> {
                               .update(createCotizacionesRecordData(
                             estado: _model.ddEstadoValue,
                           ));
+                          await showDialog(
+                            context: context,
+                            builder: (alertDialogContext) {
+                              return AlertDialog(
+                                content:
+                                    Text('Cotización actualizada exitosamente'),
+                                actions: [
+                                  TextButton(
+                                    onPressed: () =>
+                                        Navigator.pop(alertDialogContext),
+                                    child: Text('Ok'),
+                                  ),
+                                ],
+                              );
+                            },
+                          );
                         },
                         text: 'Actualizar',
                         options: FFButtonOptions(

@@ -276,410 +276,445 @@ class _EditAppointmentUserWidgetState extends State<EditAppointmentUserWidget> {
                               color: FlutterFlowTheme.of(context).primary,
                               borderRadius: BorderRadius.circular(20.0),
                             ),
-                            child: Stack(
-                              children: [
-                                Row(
-                                  mainAxisSize: MainAxisSize.max,
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Expanded(
-                                      child: Container(
-                                        width: 100.0,
-                                        height:
-                                            MediaQuery.sizeOf(context).height *
-                                                0.05,
-                                        decoration: BoxDecoration(
-                                          color: FlutterFlowTheme.of(context)
-                                              .tertiary,
-                                          borderRadius: BorderRadius.only(
-                                            bottomLeft: Radius.circular(0.0),
-                                            bottomRight: Radius.circular(0.0),
-                                            topLeft: Radius.circular(20.0),
-                                            topRight: Radius.circular(20.0),
-                                          ),
-                                        ),
-                                        child: Align(
-                                          alignment:
-                                              AlignmentDirectional(0.00, 0.00),
-                                          child: Text(
-                                            'Cita Seleccionada',
-                                            textAlign: TextAlign.center,
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium
-                                                .override(
-                                                  fontFamily: 'Readex Pro',
-                                                  fontSize: 20.0,
-                                                ),
-                                          ),
-                                        ),
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 120.0, 0.0, 0.0),
-                                  child: Row(
+                            child: Form(
+                              key: _model.formKey,
+                              autovalidateMode: AutovalidateMode.always,
+                              child: Stack(
+                                children: [
+                                  Row(
                                     mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.start,
                                     children: [
                                       Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  35.0, 0.0, 35.0, 0.0),
-                                          child: TextFormField(
-                                            controller:
-                                                _model.txtDetailsController,
-                                            focusNode:
-                                                _model.txtDetailsFocusNode,
-                                            autofocus: true,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'Descripción',
-                                              labelStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
+                                        child: Container(
+                                          width: 100.0,
+                                          height: MediaQuery.sizeOf(context)
+                                                  .height *
+                                              0.05,
+                                          decoration: BoxDecoration(
+                                            color: FlutterFlowTheme.of(context)
+                                                .tertiary,
+                                            borderRadius: BorderRadius.only(
+                                              bottomLeft: Radius.circular(0.0),
+                                              bottomRight: Radius.circular(0.0),
+                                              topLeft: Radius.circular(20.0),
+                                              topRight: Radius.circular(20.0),
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                            validator: _model
-                                                .txtDetailsControllerValidator
-                                                .asValidator(context),
+                                          ),
+                                          child: Align(
+                                            alignment: AlignmentDirectional(
+                                                0.00, 0.00),
+                                            child: Text(
+                                              'Cita Seleccionada',
+                                              textAlign: TextAlign.center,
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium
+                                                      .override(
+                                                        fontFamily:
+                                                            'Readex Pro',
+                                                        fontSize: 20.0,
+                                                      ),
+                                            ),
                                           ),
                                         ),
                                       ),
                                     ],
                                   ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      35.0, 180.0, 35.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceBetween,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 10.0, 0.0),
-                                          child: TextFormField(
-                                            controller:
-                                                _model.txtDateTimeController,
-                                            focusNode:
-                                                _model.txtDateTimeFocusNode,
-                                            autofocus: true,
-                                            readOnly: true,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText:
-                                                  'Fecha y Hora Anterior',
-                                              labelStyle:
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 120.0, 0.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    35.0, 0.0, 35.0, 0.0),
+                                            child: TextFormField(
+                                              controller:
+                                                  _model.txtDetailsController,
+                                              focusNode:
+                                                  _model.txtDetailsFocusNode,
+                                              autofocus: true,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText: 'Descripción',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                hintStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondary,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                              style:
                                                   FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              hintText:
-                                                  'Fecha y Hora Selecciónada',
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
+                                                      .bodyMedium,
+                                              validator: _model
+                                                  .txtDetailsControllerValidator
+                                                  .asValidator(context),
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                            validator: _model
-                                                .txtDateTimeControllerValidator
-                                                .asValidator(context),
                                           ),
                                         ),
-                                      ),
-                                      FFButtonWidget(
-                                        onPressed: () async {
-                                          final _datePickedDate =
-                                              await showDatePicker(
-                                            context: context,
-                                            initialDate: getCurrentTimestamp,
-                                            firstDate: getCurrentTimestamp,
-                                            lastDate: DateTime(2050),
-                                          );
-
-                                          TimeOfDay? _datePickedTime;
-                                          if (_datePickedDate != null) {
-                                            _datePickedTime =
-                                                await showTimePicker(
-                                              context: context,
-                                              initialTime:
-                                                  TimeOfDay.fromDateTime(
-                                                      getCurrentTimestamp),
-                                            );
-                                          }
-
-                                          if (_datePickedDate != null &&
-                                              _datePickedTime != null) {
-                                            safeSetState(() {
-                                              _model.datePicked = DateTime(
-                                                _datePickedDate.year,
-                                                _datePickedDate.month,
-                                                _datePickedDate.day,
-                                                _datePickedTime!.hour,
-                                                _datePickedTime.minute,
-                                              );
-                                            });
-                                          }
-                                        },
-                                        text: valueOrDefault<String>(
-                                          dateTimeFormat(
-                                              'd/M h:mm a', _model.datePicked),
-                                          'Establecer Fecha',
-                                        ),
-                                        icon: Icon(
-                                          Icons.calendar_today,
-                                          color: FlutterFlowTheme.of(context)
-                                              .primary,
-                                          size: 15.0,
-                                        ),
-                                        options: FFButtonOptions(
-                                          height: 50.0,
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  24.0, 0.0, 24.0, 0.0),
-                                          iconPadding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  0.0, 0.0, 0.0, 0.0),
-                                          color: FlutterFlowTheme.of(context)
-                                              .accent1,
-                                          textStyle:
-                                              FlutterFlowTheme.of(context)
-                                                  .titleSmall
-                                                  .override(
-                                                    fontFamily: 'Readex Pro',
-                                                    color: Colors.white,
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        35.0, 180.0, 35.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceBetween,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 10.0, 0.0),
+                                            child: TextFormField(
+                                              controller:
+                                                  _model.txtDateTimeController,
+                                              focusNode:
+                                                  _model.txtDateTimeFocusNode,
+                                              autofocus: true,
+                                              readOnly: true,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText:
+                                                    'Fecha y Hora Anterior',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                hintText:
+                                                    'Fecha y Hora Selecciónada',
+                                                hintStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    width: 2.0,
                                                   ),
-                                          elevation: 3.0,
-                                          borderSide: BorderSide(
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondary,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                              validator: _model
+                                                  .txtDateTimeControllerValidator
+                                                  .asValidator(context),
+                                            ),
+                                          ),
+                                        ),
+                                        FFButtonWidget(
+                                          onPressed: () async {
+                                            final _datePickedDate =
+                                                await showDatePicker(
+                                              context: context,
+                                              initialDate: getCurrentTimestamp,
+                                              firstDate: getCurrentTimestamp,
+                                              lastDate: DateTime(2050),
+                                            );
+
+                                            TimeOfDay? _datePickedTime;
+                                            if (_datePickedDate != null) {
+                                              _datePickedTime =
+                                                  await showTimePicker(
+                                                context: context,
+                                                initialTime:
+                                                    TimeOfDay.fromDateTime(
+                                                        getCurrentTimestamp),
+                                              );
+                                            }
+
+                                            if (_datePickedDate != null &&
+                                                _datePickedTime != null) {
+                                              safeSetState(() {
+                                                _model.datePicked = DateTime(
+                                                  _datePickedDate.year,
+                                                  _datePickedDate.month,
+                                                  _datePickedDate.day,
+                                                  _datePickedTime!.hour,
+                                                  _datePickedTime.minute,
+                                                );
+                                              });
+                                            }
+                                          },
+                                          text: valueOrDefault<String>(
+                                            dateTimeFormat('d/M h:mm a',
+                                                _model.datePicked),
+                                            'Establecer Fecha',
+                                          ),
+                                          icon: Icon(
+                                            Icons.calendar_today,
+                                            color: FlutterFlowTheme.of(context)
+                                                .primary,
+                                            size: 15.0,
+                                          ),
+                                          options: FFButtonOptions(
+                                            height: 50.0,
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    24.0, 0.0, 24.0, 0.0),
+                                            iconPadding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    0.0, 0.0, 0.0, 0.0),
                                             color: FlutterFlowTheme.of(context)
                                                 .accent1,
-                                            width: 1.0,
-                                          ),
-                                          borderRadius:
-                                              BorderRadius.circular(10.0),
-                                        ),
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      35.0, 240.0, 35.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment:
-                                        MainAxisAlignment.spaceEvenly,
-                                    children: [
-                                      FlutterFlowDropDown<String>(
-                                        controller:
-                                            _model.dropDownValueController ??=
-                                                FormFieldController<String>(
-                                          _model.dropDownValue ??= 'Pendiente',
-                                        ),
-                                        options: ['Pendiente'],
-                                        onChanged: (val) => setState(
-                                            () => _model.dropDownValue = val),
-                                        width: 360.0,
-                                        height: 50.0,
-                                        textStyle: FlutterFlowTheme.of(context)
-                                            .bodyMedium,
-                                        hintText: 'Selecciona el Estado',
-                                        icon: Icon(
-                                          Icons.keyboard_arrow_down_rounded,
-                                          color: FlutterFlowTheme.of(context)
-                                              .secondaryText,
-                                          size: 24.0,
-                                        ),
-                                        fillColor: FlutterFlowTheme.of(context)
-                                            .secondaryBackground,
-                                        elevation: 2.0,
-                                        borderColor:
-                                            FlutterFlowTheme.of(context)
-                                                .primaryBackground,
-                                        borderWidth: 2.0,
-                                        borderRadius: 8.0,
-                                        margin: EdgeInsetsDirectional.fromSTEB(
-                                            16.0, 4.0, 16.0, 4.0),
-                                        hidesUnderline: true,
-                                        isSearchable: false,
-                                        isMultiSelect: false,
-                                      ),
-                                    ],
-                                  ),
-                                ),
-                                Padding(
-                                  padding: EdgeInsetsDirectional.fromSTEB(
-                                      0.0, 60.0, 0.0, 0.0),
-                                  child: Row(
-                                    mainAxisSize: MainAxisSize.max,
-                                    mainAxisAlignment: MainAxisAlignment.center,
-                                    children: [
-                                      Expanded(
-                                        child: Padding(
-                                          padding:
-                                              EdgeInsetsDirectional.fromSTEB(
-                                                  35.0, 0.0, 35.0, 0.0),
-                                          child: TextFormField(
-                                            controller:
-                                                _model.txtUserNameController,
-                                            focusNode:
-                                                _model.txtUserNameFocusNode,
-                                            autofocus: true,
-                                            readOnly: true,
-                                            obscureText: false,
-                                            decoration: InputDecoration(
-                                              labelText: 'Nombre Completo',
-                                              labelStyle:
+                                            textStyle:
+                                                FlutterFlowTheme.of(context)
+                                                    .titleSmall
+                                                    .override(
+                                                      fontFamily: 'Readex Pro',
+                                                      color: Colors.white,
+                                                    ),
+                                            elevation: 3.0,
+                                            borderSide: BorderSide(
+                                              color:
                                                   FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              hintStyle:
-                                                  FlutterFlowTheme.of(context)
-                                                      .labelMedium,
-                                              enabledBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .primaryBackground,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .secondary,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              errorBorder: OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
-                                              focusedErrorBorder:
-                                                  OutlineInputBorder(
-                                                borderSide: BorderSide(
-                                                  color: FlutterFlowTheme.of(
-                                                          context)
-                                                      .error,
-                                                  width: 2.0,
-                                                ),
-                                                borderRadius:
-                                                    BorderRadius.circular(8.0),
-                                              ),
+                                                      .accent1,
+                                              width: 1.0,
                                             ),
-                                            style: FlutterFlowTheme.of(context)
-                                                .bodyMedium,
-                                            validator: _model
-                                                .txtUserNameControllerValidator
-                                                .asValidator(context),
+                                            borderRadius:
+                                                BorderRadius.circular(10.0),
                                           ),
                                         ),
-                                      ),
-                                    ],
+                                      ],
+                                    ),
                                   ),
-                                ),
-                              ],
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        35.0, 240.0, 35.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.spaceEvenly,
+                                      children: [
+                                        FlutterFlowDropDown<String>(
+                                          controller:
+                                              _model.dropDownValueController ??=
+                                                  FormFieldController<String>(
+                                            _model.dropDownValue ??=
+                                                'Pendiente',
+                                          ),
+                                          options: ['Pendiente'],
+                                          onChanged: (val) => setState(
+                                              () => _model.dropDownValue = val),
+                                          width: 360.0,
+                                          height: 50.0,
+                                          textStyle:
+                                              FlutterFlowTheme.of(context)
+                                                  .bodyMedium,
+                                          hintText: 'Selecciona el Estado',
+                                          icon: Icon(
+                                            Icons.keyboard_arrow_down_rounded,
+                                            color: FlutterFlowTheme.of(context)
+                                                .secondaryText,
+                                            size: 24.0,
+                                          ),
+                                          fillColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .secondaryBackground,
+                                          elevation: 2.0,
+                                          borderColor:
+                                              FlutterFlowTheme.of(context)
+                                                  .primaryBackground,
+                                          borderWidth: 2.0,
+                                          borderRadius: 8.0,
+                                          margin:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  16.0, 4.0, 16.0, 4.0),
+                                          hidesUnderline: true,
+                                          isSearchable: false,
+                                          isMultiSelect: false,
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                  Padding(
+                                    padding: EdgeInsetsDirectional.fromSTEB(
+                                        0.0, 60.0, 0.0, 0.0),
+                                    child: Row(
+                                      mainAxisSize: MainAxisSize.max,
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: [
+                                        Expanded(
+                                          child: Padding(
+                                            padding:
+                                                EdgeInsetsDirectional.fromSTEB(
+                                                    35.0, 0.0, 35.0, 0.0),
+                                            child: TextFormField(
+                                              controller:
+                                                  _model.txtUserNameController,
+                                              focusNode:
+                                                  _model.txtUserNameFocusNode,
+                                              autofocus: true,
+                                              readOnly: true,
+                                              obscureText: false,
+                                              decoration: InputDecoration(
+                                                labelText: 'Nombre Completo',
+                                                labelStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                hintStyle:
+                                                    FlutterFlowTheme.of(context)
+                                                        .labelMedium,
+                                                enabledBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .primaryBackground,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .secondary,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                errorBorder: OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                                focusedErrorBorder:
+                                                    OutlineInputBorder(
+                                                  borderSide: BorderSide(
+                                                    color: FlutterFlowTheme.of(
+                                                            context)
+                                                        .error,
+                                                    width: 2.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          8.0),
+                                                ),
+                                              ),
+                                              style:
+                                                  FlutterFlowTheme.of(context)
+                                                      .bodyMedium,
+                                              validator: _model
+                                                  .txtUserNameControllerValidator
+                                                  .asValidator(context),
+                                            ),
+                                          ),
+                                        ),
+                                      ],
+                                    ),
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
                         ],

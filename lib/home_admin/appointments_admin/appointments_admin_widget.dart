@@ -7,8 +7,11 @@ import '/flutter_flow/flutter_flow_util.dart';
 import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
+import 'dart:async';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'appointments_admin_model.dart';
@@ -372,6 +375,15 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                           child: TextFormField(
                             controller: _model.txtBuscarController,
                             focusNode: _model.txtBuscarFocusNode,
+                            onChanged: (_) => EasyDebounce.debounce(
+                              '_model.txtBuscarController',
+                              Duration(milliseconds: 2000),
+                              () async {
+                                setState(() =>
+                                    _model.firestoreRequestCompleter = null);
+                                await _model.waitForFirestoreRequestCompleted();
+                              },
+                            ),
                             obscureText: false,
                             decoration: InputDecoration(
                               labelStyle:
@@ -469,7 +481,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                               child: FlutterFlowDropDown<String>(
                                 controller: _model.ddFiltrarValueController ??=
                                     FormFieldController<String>(null),
-                                options: ['Mes', 'Anio', 'Pendientes'],
+                                options: ['Activa', 'Cancelada', 'Pendiente'],
                                 onChanged: (val) =>
                                     setState(() => _model.ddFiltrarValue = val),
                                 width: 100.0,
@@ -480,6 +492,8 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                       fontFamily: 'Readex Pro',
                                       color:
                                           FlutterFlowTheme.of(context).primary,
+                                      fontSize: 10.0,
+                                      fontWeight: FontWeight.w600,
                                     ),
                                 hintText: 'Filtrar',
                                 icon: Icon(
@@ -527,7 +541,7 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                   ),
                               elevation: 3.0,
                               borderSide: BorderSide(
-                                color: FlutterFlowTheme.of(context).secondary,
+                                color: FlutterFlowTheme.of(context).accent1,
                                 width: 1.0,
                               ),
                               borderRadius: BorderRadius.circular(10.0),
@@ -542,22 +556,44 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                   padding: EdgeInsetsDirectional.fromSTEB(0.0, 18.0, 0.0, 0.0),
                   child: Container(
                     width: double.infinity,
-                    height: 495.0,
+                    height: 560.0,
                     decoration: BoxDecoration(
                       color: FlutterFlowTheme.of(context).primaryBackground,
                     ),
-                    child: StreamBuilder<List<CitasRecord>>(
-                      stream: queryCitasRecord(),
+                    child: FutureBuilder<List<CitasRecord>>(
+                      future: (_model.firestoreRequestCompleter ??=
+                              Completer<List<CitasRecord>>()
+                                ..complete(queryCitasRecordOnce(
+                                  queryBuilder: (citasRecord) => citasRecord
+                                      .where(
+                                        'nombreUsuario',
+                                        isEqualTo: _model
+                                                    .txtBuscarController.text !=
+                                                ''
+                                            ? _model.txtBuscarController.text
+                                            : null,
+                                      )
+                                      .where(
+                                        'estado',
+                                        isEqualTo: _model.ddFiltrarValue != ''
+                                            ? _model.ddFiltrarValue
+                                            : null,
+                                      ),
+                                )))
+                          .future,
                       builder: (context, snapshot) {
                         // Customize what your widget looks like when it's loading.
                         if (!snapshot.hasData) {
                           return Center(
-                            child: SizedBox(
-                              width: 50.0,
-                              height: 50.0,
-                              child: CircularProgressIndicator(
-                                valueColor: AlwaysStoppedAnimation<Color>(
-                                  FlutterFlowTheme.of(context).primary,
+                            child: Padding(
+                              padding: EdgeInsetsDirectional.fromSTEB(
+                                  20.0, 0.0, 0.0, 0.0),
+                              child: SizedBox(
+                                width: 80.0,
+                                height: 80.0,
+                                child: SpinKitWanderingCubes(
+                                  color: FlutterFlowTheme.of(context).secondary,
+                                  size: 80.0,
                                 ),
                               ),
                             ),
@@ -565,95 +601,88 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                         }
                         List<CitasRecord> listViewCitasRecordList =
                             snapshot.data!;
-                        return ListView.builder(
-                          padding: EdgeInsets.zero,
-                          scrollDirection: Axis.vertical,
-                          itemCount: listViewCitasRecordList.length,
-                          itemBuilder: (context, listViewIndex) {
-                            final listViewCitasRecord =
-                                listViewCitasRecordList[listViewIndex];
-                            return Padding(
-                              padding: EdgeInsetsDirectional.fromSTEB(
-                                  15.0, 15.0, 15.0, 15.0),
-                              child: Container(
-                                width: 288.0,
-                                height: 305.0,
-                                decoration: BoxDecoration(
-                                  image: DecorationImage(
-                                    fit: BoxFit.cover,
-                                    image: Image.network(
-                                      'https://images.unsplash.com/photo-1435527173128-983b87201f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwzfHwlMjBjaXRhfGVufDB8fHx8MTcwMDI1MzEwNnww&ixlib=rb-4.0.3&q=80&w=1080',
-                                    ).image,
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            setState(
+                                () => _model.firestoreRequestCompleter = null);
+                            await _model.waitForFirestoreRequestCompleted();
+                          },
+                          child: ListView.builder(
+                            padding: EdgeInsets.zero,
+                            scrollDirection: Axis.vertical,
+                            itemCount: listViewCitasRecordList.length,
+                            itemBuilder: (context, listViewIndex) {
+                              final listViewCitasRecord =
+                                  listViewCitasRecordList[listViewIndex];
+                              return Padding(
+                                padding: EdgeInsetsDirectional.fromSTEB(
+                                    15.0, 15.0, 15.0, 15.0),
+                                child: Container(
+                                  width: 288.0,
+                                  height: 305.0,
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      fit: BoxFit.cover,
+                                      image: Image.network(
+                                        'https://images.unsplash.com/photo-1435527173128-983b87201f4d?crop=entropy&cs=tinysrgb&fit=max&fm=jpg&ixid=M3w0NTYyMDF8MHwxfHNlYXJjaHwzfHwlMjBjaXRhfGVufDB8fHx8MTcwMDI1MzEwNnww&ixlib=rb-4.0.3&q=80&w=1080',
+                                      ).image,
+                                    ),
+                                    gradient: LinearGradient(
+                                      colors: [
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText,
+                                        FlutterFlowTheme.of(context)
+                                            .secondaryText
+                                      ],
+                                      stops: [0.0, 1.0],
+                                      begin: AlignmentDirectional(0.0, -1.0),
+                                      end: AlignmentDirectional(0, 1.0),
+                                    ),
+                                    borderRadius: BorderRadius.circular(20.0),
                                   ),
-                                  gradient: LinearGradient(
-                                    colors: [
-                                      FlutterFlowTheme.of(context)
-                                          .secondaryText,
-                                      FlutterFlowTheme.of(context).secondaryText
-                                    ],
-                                    stops: [0.0, 1.0],
-                                    begin: AlignmentDirectional(0.0, -1.0),
-                                    end: AlignmentDirectional(0, 1.0),
-                                  ),
-                                  borderRadius: BorderRadius.circular(20.0),
-                                ),
-                                child: Stack(
-                                  children: [
-                                    Row(
-                                      mainAxisSize: MainAxisSize.max,
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      crossAxisAlignment:
-                                          CrossAxisAlignment.center,
-                                      children: [
-                                        Expanded(
-                                          child: Container(
-                                            width: 100.0,
-                                            height: MediaQuery.sizeOf(context)
-                                                    .height *
-                                                0.05,
-                                            decoration: BoxDecoration(
-                                              color:
-                                                  FlutterFlowTheme.of(context)
-                                                      .tertiary,
-                                              image: DecorationImage(
-                                                fit: BoxFit.cover,
-                                                image: Image.network(
-                                                  '',
-                                                ).image,
-                                              ),
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(0.0),
-                                                bottomRight:
-                                                    Radius.circular(0.0),
-                                                topLeft: Radius.circular(20.0),
-                                                topRight: Radius.circular(20.0),
-                                              ),
-                                            ),
-                                            child: Row(
-                                              mainAxisSize: MainAxisSize.max,
-                                              mainAxisAlignment:
-                                                  MainAxisAlignment.center,
-                                              children: [
-                                                Text(
-                                                  'Cliente: ',
-                                                  textAlign: TextAlign.center,
-                                                  style: FlutterFlowTheme.of(
-                                                          context)
-                                                      .bodyMedium
-                                                      .override(
-                                                        fontFamily:
-                                                            'Readex Pro',
-                                                        fontSize: 24.0,
-                                                        fontWeight:
-                                                            FontWeight.bold,
-                                                      ),
+                                  child: Stack(
+                                    children: [
+                                      Row(
+                                        mainAxisSize: MainAxisSize.max,
+                                        mainAxisAlignment:
+                                            MainAxisAlignment.center,
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.center,
+                                        children: [
+                                          Expanded(
+                                            child: Container(
+                                              width: 100.0,
+                                              height: MediaQuery.sizeOf(context)
+                                                      .height *
+                                                  0.05,
+                                              decoration: BoxDecoration(
+                                                color:
+                                                    FlutterFlowTheme.of(context)
+                                                        .tertiary,
+                                                image: DecorationImage(
+                                                  fit: BoxFit.cover,
+                                                  image: Image.network(
+                                                    '',
+                                                  ).image,
                                                 ),
-                                                Flexible(
-                                                  child: Text(
-                                                    listViewCitasRecord
-                                                        .nombreUsuario,
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(0.0),
+                                                  bottomRight:
+                                                      Radius.circular(0.0),
+                                                  topLeft:
+                                                      Radius.circular(20.0),
+                                                  topRight:
+                                                      Radius.circular(20.0),
+                                                ),
+                                              ),
+                                              child: Row(
+                                                mainAxisSize: MainAxisSize.max,
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: [
+                                                  Text(
+                                                    'Cliente: ',
                                                     textAlign: TextAlign.center,
                                                     style: FlutterFlowTheme.of(
                                                             context)
@@ -666,241 +695,266 @@ class _AppointmentsAdminWidgetState extends State<AppointmentsAdminWidget> {
                                                               FontWeight.bold,
                                                         ),
                                                   ),
-                                                ),
-                                              ],
-                                            ),
-                                          ),
-                                        ),
-                                      ],
-                                    ),
-                                    Padding(
-                                      padding: EdgeInsetsDirectional.fromSTEB(
-                                          0.0, 104.0, 0.0, 0.0),
-                                      child: Row(
-                                        mainAxisSize: MainAxisSize.max,
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: [
-                                          Flexible(
-                                            child: ClipRRect(
-                                              borderRadius: BorderRadius.only(
-                                                bottomLeft:
-                                                    Radius.circular(15.0),
-                                                bottomRight:
-                                                    Radius.circular(15.0),
-                                                topLeft: Radius.circular(0.0),
-                                                topRight: Radius.circular(0.0),
-                                              ),
-                                              child: BackdropFilter(
-                                                filter: ImageFilter.blur(
-                                                  sigmaX: 5.0,
-                                                  sigmaY: 7.0,
-                                                ),
-                                                child: Column(
-                                                  mainAxisSize:
-                                                      MainAxisSize.max,
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.start,
-                                                  children: [
-                                                    Row(
-                                                      mainAxisSize:
-                                                          MainAxisSize.max,
-                                                      mainAxisAlignment:
-                                                          MainAxisAlignment
-                                                              .center,
-                                                      children: [
-                                                        Text(
-                                                          'Fecha Programada: ',
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                fontSize: 15.0,
-                                                              ),
-                                                        ),
-                                                        Text(
-                                                          dateTimeFormat(
-                                                              'd/M h:mm a',
-                                                              listViewCitasRecord
-                                                                  .fecha!),
-                                                          style: FlutterFlowTheme
-                                                                  .of(context)
-                                                              .bodyMedium
-                                                              .override(
-                                                                fontFamily:
-                                                                    'Readex Pro',
-                                                                fontSize: 15.0,
-                                                              ),
-                                                        ),
-                                                      ],
+                                                  Flexible(
+                                                    child: Text(
+                                                      listViewCitasRecord
+                                                          .nombreUsuario,
+                                                      textAlign:
+                                                          TextAlign.center,
+                                                      style: FlutterFlowTheme
+                                                              .of(context)
+                                                          .bodyMedium
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            fontSize: 24.0,
+                                                            fontWeight:
+                                                                FontWeight.bold,
+                                                          ),
                                                     ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  25.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'Descripción: ',
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  fontSize:
-                                                                      15.0,
-                                                                ),
-                                                          ),
-                                                          Text(
-                                                            listViewCitasRecord
-                                                                .descripcion,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  fontSize:
-                                                                      15.0,
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                    Padding(
-                                                      padding:
-                                                          EdgeInsetsDirectional
-                                                              .fromSTEB(
-                                                                  0.0,
-                                                                  25.0,
-                                                                  0.0,
-                                                                  0.0),
-                                                      child: Row(
-                                                        mainAxisSize:
-                                                            MainAxisSize.max,
-                                                        mainAxisAlignment:
-                                                            MainAxisAlignment
-                                                                .center,
-                                                        children: [
-                                                          Text(
-                                                            'Estado: ',
-                                                            textAlign: TextAlign
-                                                                .center,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  fontSize:
-                                                                      15.0,
-                                                                ),
-                                                          ),
-                                                          Text(
-                                                            listViewCitasRecord
-                                                                .estado,
-                                                            style: FlutterFlowTheme
-                                                                    .of(context)
-                                                                .bodyMedium
-                                                                .override(
-                                                                  fontFamily:
-                                                                      'Readex Pro',
-                                                                  fontSize:
-                                                                      15.0,
-                                                                  fontWeight:
-                                                                      FontWeight
-                                                                          .bold,
-                                                                ),
-                                                          ),
-                                                        ],
-                                                      ),
-                                                    ),
-                                                  ],
-                                                ),
+                                                  ),
+                                                ],
                                               ),
                                             ),
                                           ),
                                         ],
                                       ),
-                                    ),
-                                    Align(
-                                      alignment:
-                                          AlignmentDirectional(-1.00, 1.00),
-                                      child: Padding(
+                                      Padding(
                                         padding: EdgeInsetsDirectional.fromSTEB(
-                                            0.0, 0.0, 0.0, 20.0),
+                                            0.0, 104.0, 0.0, 0.0),
                                         child: Row(
                                           mainAxisSize: MainAxisSize.max,
                                           mainAxisAlignment:
                                               MainAxisAlignment.center,
                                           children: [
-                                            FFButtonWidget(
-                                              onPressed: () async {
-                                                context.pushNamed(
-                                                  'EditAppointmentAdmin',
-                                                  queryParameters: {
-                                                    'pCita': serializeParam(
-                                                      listViewCitasRecord,
-                                                      ParamType.Document,
-                                                    ),
-                                                  }.withoutNulls,
-                                                  extra: <String, dynamic>{
-                                                    'pCita':
-                                                        listViewCitasRecord,
-                                                  },
-                                                );
-                                              },
-                                              text: 'Editar',
-                                              options: FFButtonOptions(
-                                                height: 40.0,
-                                                padding: EdgeInsetsDirectional
-                                                    .fromSTEB(
-                                                        24.0, 0.0, 24.0, 0.0),
-                                                iconPadding:
-                                                    EdgeInsetsDirectional
-                                                        .fromSTEB(
-                                                            0.0, 0.0, 0.0, 0.0),
-                                                color:
-                                                    FlutterFlowTheme.of(context)
-                                                        .accent1,
-                                                textStyle:
-                                                    FlutterFlowTheme.of(context)
-                                                        .titleSmall
-                                                        .override(
-                                                          fontFamily:
-                                                              'Readex Pro',
-                                                          color: Colors.white,
-                                                        ),
-                                                elevation: 3.0,
-                                                borderSide: BorderSide(
-                                                  color: Colors.transparent,
-                                                  width: 1.0,
+                                            Flexible(
+                                              child: ClipRRect(
+                                                borderRadius: BorderRadius.only(
+                                                  bottomLeft:
+                                                      Radius.circular(15.0),
+                                                  bottomRight:
+                                                      Radius.circular(15.0),
+                                                  topLeft: Radius.circular(0.0),
+                                                  topRight:
+                                                      Radius.circular(0.0),
                                                 ),
-                                                borderRadius:
-                                                    BorderRadius.circular(20.0),
+                                                child: BackdropFilter(
+                                                  filter: ImageFilter.blur(
+                                                    sigmaX: 5.0,
+                                                    sigmaY: 7.0,
+                                                  ),
+                                                  child: Column(
+                                                    mainAxisSize:
+                                                        MainAxisSize.max,
+                                                    mainAxisAlignment:
+                                                        MainAxisAlignment.start,
+                                                    children: [
+                                                      Row(
+                                                        mainAxisSize:
+                                                            MainAxisSize.max,
+                                                        mainAxisAlignment:
+                                                            MainAxisAlignment
+                                                                .center,
+                                                        children: [
+                                                          Text(
+                                                            'Fecha Programada: ',
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                ),
+                                                          ),
+                                                          Text(
+                                                            dateTimeFormat(
+                                                                'd/M h:mm a',
+                                                                listViewCitasRecord
+                                                                    .fecha!),
+                                                            style: FlutterFlowTheme
+                                                                    .of(context)
+                                                                .bodyMedium
+                                                                .override(
+                                                                  fontFamily:
+                                                                      'Readex Pro',
+                                                                  fontSize:
+                                                                      15.0,
+                                                                ),
+                                                          ),
+                                                        ],
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              'Descripción: ',
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    fontSize:
+                                                                        15.0,
+                                                                  ),
+                                                            ),
+                                                            Text(
+                                                              listViewCitasRecord
+                                                                  .descripcion,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    fontSize:
+                                                                        15.0,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                      Padding(
+                                                        padding:
+                                                            EdgeInsetsDirectional
+                                                                .fromSTEB(
+                                                                    0.0,
+                                                                    25.0,
+                                                                    0.0,
+                                                                    0.0),
+                                                        child: Row(
+                                                          mainAxisSize:
+                                                              MainAxisSize.max,
+                                                          mainAxisAlignment:
+                                                              MainAxisAlignment
+                                                                  .center,
+                                                          children: [
+                                                            Text(
+                                                              'Estado: ',
+                                                              textAlign:
+                                                                  TextAlign
+                                                                      .center,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    fontSize:
+                                                                        15.0,
+                                                                  ),
+                                                            ),
+                                                            Text(
+                                                              listViewCitasRecord
+                                                                  .estado,
+                                                              style: FlutterFlowTheme
+                                                                      .of(context)
+                                                                  .bodyMedium
+                                                                  .override(
+                                                                    fontFamily:
+                                                                        'Readex Pro',
+                                                                    fontSize:
+                                                                        15.0,
+                                                                    fontWeight:
+                                                                        FontWeight
+                                                                            .bold,
+                                                                  ),
+                                                            ),
+                                                          ],
+                                                        ),
+                                                      ),
+                                                    ],
+                                                  ),
+                                                ),
                                               ),
                                             ),
                                           ],
                                         ),
                                       ),
-                                    ),
-                                  ],
+                                      Align(
+                                        alignment:
+                                            AlignmentDirectional(-1.00, 1.00),
+                                        child: Padding(
+                                          padding:
+                                              EdgeInsetsDirectional.fromSTEB(
+                                                  0.0, 0.0, 0.0, 20.0),
+                                          child: Row(
+                                            mainAxisSize: MainAxisSize.max,
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: [
+                                              FFButtonWidget(
+                                                onPressed: () async {
+                                                  context.pushNamed(
+                                                    'EditAppointmentAdmin',
+                                                    queryParameters: {
+                                                      'pCita': serializeParam(
+                                                        listViewCitasRecord,
+                                                        ParamType.Document,
+                                                      ),
+                                                    }.withoutNulls,
+                                                    extra: <String, dynamic>{
+                                                      'pCita':
+                                                          listViewCitasRecord,
+                                                    },
+                                                  );
+                                                },
+                                                text: 'Editar',
+                                                options: FFButtonOptions(
+                                                  height: 40.0,
+                                                  padding: EdgeInsetsDirectional
+                                                      .fromSTEB(
+                                                          24.0, 0.0, 24.0, 0.0),
+                                                  iconPadding:
+                                                      EdgeInsetsDirectional
+                                                          .fromSTEB(0.0, 0.0,
+                                                              0.0, 0.0),
+                                                  color: FlutterFlowTheme.of(
+                                                          context)
+                                                      .accent1,
+                                                  textStyle:
+                                                      FlutterFlowTheme.of(
+                                                              context)
+                                                          .titleSmall
+                                                          .override(
+                                                            fontFamily:
+                                                                'Readex Pro',
+                                                            color: Colors.white,
+                                                          ),
+                                                  elevation: 3.0,
+                                                  borderSide: BorderSide(
+                                                    color: Colors.transparent,
+                                                    width: 1.0,
+                                                  ),
+                                                  borderRadius:
+                                                      BorderRadius.circular(
+                                                          20.0),
+                                                ),
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    ],
+                                  ),
                                 ),
-                              ),
-                            );
-                          },
+                              );
+                            },
+                          ),
                         );
                       },
                     ),

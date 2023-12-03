@@ -8,6 +8,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/scheduler.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 import 'my_account_model.dart';
@@ -394,13 +395,16 @@ class _MyAccountWidgetState extends State<MyAccountWidget> {
                                 // Customize what your widget looks like when it's loading.
                                 if (!snapshot.hasData) {
                                   return Center(
-                                    child: SizedBox(
-                                      width: 50.0,
-                                      height: 50.0,
-                                      child: CircularProgressIndicator(
-                                        valueColor:
-                                            AlwaysStoppedAnimation<Color>(
-                                          FlutterFlowTheme.of(context).primary,
+                                    child: Padding(
+                                      padding: EdgeInsetsDirectional.fromSTEB(
+                                          20.0, 0.0, 0.0, 0.0),
+                                      child: SizedBox(
+                                        width: 80.0,
+                                        height: 80.0,
+                                        child: SpinKitWanderingCubes(
+                                          color: FlutterFlowTheme.of(context)
+                                              .secondary,
+                                          size: 80.0,
                                         ),
                                       ),
                                     ),

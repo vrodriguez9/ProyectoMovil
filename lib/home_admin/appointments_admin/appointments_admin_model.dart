@@ -8,8 +8,11 @@ import '/flutter_flow/flutter_flow_widgets.dart';
 import '/flutter_flow/form_field_controller.dart';
 import 'dart:ui';
 import 'appointments_admin_widget.dart' show AppointmentsAdminWidget;
+import 'dart:async';
+import 'package:easy_debounce/easy_debounce.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_spinkit/flutter_spinkit.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:provider/provider.dart';
 
@@ -21,6 +24,7 @@ class AppointmentsAdminModel extends FlutterFlowModel<AppointmentsAdminWidget> {
   FocusNode? txtBuscarFocusNode;
   TextEditingController? txtBuscarController;
   String? Function(BuildContext, String?)? txtBuscarControllerValidator;
+  Completer<List<CitasRecord>>? firestoreRequestCompleter;
   // State field(s) for ddFiltrar widget.
   String? ddFiltrarValue;
   FormFieldController<String>? ddFiltrarValueController;
@@ -38,4 +42,19 @@ class AppointmentsAdminModel extends FlutterFlowModel<AppointmentsAdminWidget> {
   /// Action blocks are added here.
 
   /// Additional helper methods are added here.
+
+  Future waitForFirestoreRequestCompleted({
+    double minWait = 0,
+    double maxWait = double.infinity,
+  }) async {
+    final stopwatch = Stopwatch()..start();
+    while (true) {
+      await Future.delayed(Duration(milliseconds: 50));
+      final timeElapsed = stopwatch.elapsedMilliseconds;
+      final requestComplete = firestoreRequestCompleter?.isCompleted ?? false;
+      if (timeElapsed > maxWait || (requestComplete && timeElapsed > minWait)) {
+        break;
+      }
+    }
+  }
 }
